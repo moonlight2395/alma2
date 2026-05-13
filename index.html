@@ -21,7 +21,7 @@
                             darkPurple: '#4A193E',
                             cream: '#FDF9EE',
                             red: '#B83A42',
-                            gold: '#F4B223',
+                            gold: '#F4DEC4', /* Updated globally to new gold color */
                             bubbleBg: '#701462',
                             bubbleText: '#F4DEC4'
                         }
@@ -64,14 +64,14 @@
     <!-- RESTRUCTURED HEADER -->
     <header class="w-full flex flex-col z-40 bg-white dark:bg-gray-900 shadow-sm relative">
         
-        <!-- 1. Solid Navigation Bar (This will now firmly sit above the image) -->
-        <div class="w-full px-6 py-4 flex justify-between items-center bg-brand-darkPurple border-b border-black/20">
+        <!-- 1. Solid Navigation Bar -->
+        <div class="w-full px-4 md:px-6 py-4 flex justify-between items-center bg-brand-darkPurple border-b border-black/20">
             <div class="relative">
-                <button id="edition-btn" class="flex items-center gap-2 text-white hover:bg-white/10 px-4 py-2 rounded-xl transition-colors border border-white/20 shadow-sm">
-                    <i data-lucide="calendar" class="w-4 h-4 text-white/80"></i>
-                    <span class="font-montserrat font-bold text-sm flex items-center gap-1">
+                <button id="edition-btn" class="flex items-center gap-1.5 md:gap-2 text-white hover:bg-white/10 px-3 py-1.5 md:px-4 md:py-2 rounded-xl transition-colors border border-white/20 shadow-sm">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5 md:w-4 md:h-4 text-white/80"></i>
+                    <span class="font-montserrat font-bold text-xs md:text-sm flex items-center gap-1">
                         <span id="active-edition-label">Latest Edition</span> 
-                        <i data-lucide="chevron-down" id="edition-chevron" class="w-4 h-4 transition-transform duration-300"></i>
+                        <i data-lucide="chevron-down" id="edition-chevron" class="w-3.5 h-3.5 md:w-4 md:h-4 transition-transform duration-300"></i>
                     </span>
                 </button>
                 <div id="edition-menu" class="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50 hidden opacity-0 transition-opacity duration-200">
@@ -84,21 +84,22 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 md:gap-3">
                 <div id="search-container" class="relative hidden opacity-0 transition-opacity duration-300">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                    <input type="text" id="search-input" placeholder="Search news..." class="w-48 md:w-64 bg-white text-gray-900 text-sm rounded-full py-2.5 pl-9 pr-4 outline-none focus:ring-2 focus:ring-brand-gold transition-all shadow-lg" />
+                    <!-- Font is strictly 16px on mobile to prevent iOS zooming, and w-40 to prevent horizontal scroll white lines -->
+                    <input type="text" id="search-input" placeholder="Search news..." class="w-40 md:w-64 bg-white text-gray-900 text-[16px] md:text-sm rounded-full py-2 pl-9 pr-4 outline-none focus:ring-2 focus:ring-brand-gold transition-all shadow-lg" />
                 </div>
-                <button id="search-btn" class="p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 border border-white/20 shadow-sm" aria-label="Toggle Search">
-                    <i data-lucide="search" id="search-icon" class="w-5 h-5"></i>
+                <button id="search-btn" class="p-2 md:p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 border border-white/20 shadow-sm" aria-label="Toggle Search">
+                    <i data-lucide="search" id="search-icon" class="w-4 h-4 md:w-5 md:h-5"></i>
                 </button>
-                <button id="theme-toggle" class="p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 border border-white/20 shadow-sm" aria-label="Toggle Dark Mode">
-                    <i data-lucide="moon" id="theme-icon" class="w-5 h-5"></i>
+                <button id="theme-toggle" class="p-2 md:p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 border border-white/20 shadow-sm" aria-label="Toggle Dark Mode">
+                    <i data-lucide="moon" id="theme-icon" class="w-4 h-4 md:w-5 md:h-5"></i>
                 </button>
             </div>
         </div>
 
-        <!-- 2. Clean Image Banner (Fully responsive, no cropping constraints) -->
+        <!-- 2. Clean Image Banner -->
         <div class="w-full bg-brand-darkPurple">
             <img 
                 src="https://ik.imagekit.io/fcua6x8jl/FINAL3_page-0001%20(1).jpg" 
@@ -136,7 +137,7 @@
             </div>
 
             <!-- DYNAMIC TABLES CONTAINER -->
-            <div id="tables-container" class="mt-8 flex flex-col gap-8 hidden">
+            <div id="tables-container" class="mt-8 flex flex-col gap-8 hidden w-full">
                 <!-- Tables rendered via JS -->
             </div>
         </div>
@@ -155,8 +156,8 @@
 
     <footer class="bg-[#9E5192] text-white font-montserrat mt-12 border-t-4 border-brand-gold">
         <div class="max-w-7xl mx-auto px-6 py-10">
-            <div class="bg-[#701462] rounded-xl p-6 text-center mb-10 shadow-inner border border-white/10">
-                <p class="text-[11px] md:text-xs leading-relaxed max-w-4xl mx-auto text-gray-200">
+            <div class="bg-[#701462] rounded-xl py-4 px-5 text-center mb-10 shadow-inner border border-white/10 max-w-3xl mx-auto">
+                <p class="text-[11px] md:text-xs leading-relaxed text-gray-200">
                     SAIC is grateful to the Director, Dean (Resource & Alumni), Alumni Associations, and the entire IIT (BHU) fraternity for their constant support and blessings. We look forward to your valuable feedback. To share information for future editions, reach us at <a href="mailto:alumnicell@iitbhu.ac.in" class="text-brand-gold hover:underline">alumnicell@iitbhu.ac.in</a>.
                 </p>
             </div>
@@ -165,7 +166,7 @@
                 
                 <div class="flex flex-col gap-3">
                     <h4 class="text-sm md:text-base font-bold tracking-widest text-[#F4DEC4] uppercase">Contact</h4>
-                    <div class="text-[11px] md:text-xs text-gray-300 space-y-1.5">
+                    <div class="text-[11px] md:text-xs text-gray-300 space-y-0.5">
                         <p class="font-semibold text-white">Prof. Hiralal Pramanik,</p>
                         <p>Dean (Resource & Alumni)</p>
                         <p><a href="mailto:dora@iitbhu.ac.in" class="hover:text-white transition-colors">dora@iitbhu.ac.in</a></p>
@@ -214,16 +215,18 @@
         </div>
     </footer>
 
+    <!-- MODAL LAYOUT FIXED FOR MOBILE -->
     <div id="article-modal" class="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm transition-all duration-300 opacity-0 pointer-events-none">
         <div id="modal-bg-overlay" class="absolute inset-0 cursor-pointer"></div>
         
-        <div id="modal-content-container" class="bg-white dark:bg-[#121212] w-full max-w-6xl h-[95vh] rounded-2xl shadow-2xl flex flex-col lg:flex-row relative transform scale-95 translate-y-8 opacity-0 transition-all duration-500 ease-out z-10 overflow-hidden border border-gray-200 dark:border-gray-800">
+        <div id="modal-content-container" class="bg-white dark:bg-[#121212] w-full max-w-6xl h-[95vh] rounded-2xl shadow-2xl flex flex-col lg:flex-row relative transform scale-95 translate-y-8 opacity-0 transition-all duration-500 ease-out z-10 overflow-y-auto lg:overflow-hidden border border-gray-200 dark:border-gray-800">
             
             <button id="close-modal-btn" class="absolute top-4 right-4 z-50 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-all hover:rotate-90 backdrop-blur-md">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
 
-            <div class="w-full lg:w-2/3 h-full flex flex-col overflow-y-auto no-scrollbar relative border-r border-gray-200 dark:border-gray-800">
+            <!-- Main Article View (Left) -->
+            <div class="w-full lg:w-2/3 flex flex-col lg:h-full lg:overflow-y-auto no-scrollbar relative border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-800 shrink-0">
                 <div class="w-full h-64 md:h-80 relative bg-gray-200 shrink-0">
                     <img id="modal-image" src="" alt="Article Cover" class="w-full h-full object-cover" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
@@ -240,18 +243,19 @@
                     <div id="modal-body" class="prose prose-lg dark:prose-invert prose-blue max-w-none text-gray-700 dark:text-gray-300 leading-relaxed space-y-6 font-serif">
                         </div>
                     <div id="modal-external-link-container" class="mt-10 hidden">
-                        <a id="modal-external-link" href="#" target="_blank" class="inline-flex items-center gap-2 bg-brand-gold hover:bg-yellow-500 text-brand-purple font-montserrat font-bold py-3 px-6 rounded-xl transition-transform hover:scale-105 shadow-md">
+                        <a id="modal-external-link" href="#" target="_blank" class="inline-flex items-center gap-2 bg-brand-gold hover:opacity-90 text-brand-purple font-montserrat font-bold py-3 px-6 rounded-xl transition-transform hover:scale-105 shadow-md">
                             Read Full External Article <i data-lucide="external-link" class="w-4 h-4"></i>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <div class="w-full lg:w-1/3 h-full bg-gray-50 dark:bg-[#1a1a1a] flex flex-col">
+            <!-- More News Sidebar (Right/Bottom) -->
+            <div class="w-full lg:w-1/3 flex flex-col lg:h-full bg-gray-50 dark:bg-[#1a1a1a] shrink-0">
                 <div class="p-6 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1e1e]">
                     <h3 class="font-montserrat font-bold text-lg text-brand-purple dark:text-brand-gold">More News</h3>
                 </div>
-                <div id="modal-sidebar" class="flex-1 overflow-y-auto no-scrollbar p-4 flex flex-col gap-3">
+                <div id="modal-sidebar" class="flex-1 lg:overflow-y-auto no-scrollbar p-4 flex flex-col gap-3">
                     </div>
             </div>
 
@@ -264,15 +268,13 @@
         // ==========================================
         
         // DYNAMIC ARTICLE ENGINE:
-        // Paste your published CSV links for the main news feed for each edition
         const EDITION_SOURCES = {
             "March 2026": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLlwZL6OhqHOG04uln2mtfA4C8RmS3fADrmCYd4qXRy8qBopqJ5RpkokcrDhyCF26TQIPzKNXhDNU6/pub?output=csv",
-            "February 2026": "", // Paste your February CSV link here when ready
-            "Centenary Special": "" // Paste your Centenary CSV link here when ready
+            "February 2026": "", 
+            "Centenary Special": "" 
         };
 
         // DYNAMIC TABLES ENGINE: 
-        // Paste your published CSV links here for tables associated with each edition
         const EDITION_TABLES = {
             "March 2026": [
                 {
@@ -284,9 +286,7 @@
                     url: 'data:text/csv;charset=utf-8,"Title","Faculty","Patent Number"\n"A System and Method for Electrochemical Detection and Quantification of Cell Characteristics and Functions","Dr. Marshal, Juhi Jaiswal","582290"\n"A Heterocyclic Derivative and a Method of Synthesis Thereof","Sushil Kumar Singh, Ashok Kumar, Nilesh Gajanan Bajad","582450"\n"An IoT-Enabled System and Method for Aquatic Life Management","Dr. Prasenjit Chanak, Mr. Nuthan Chingcetham, Prof. Pramod Kumar Jain","582592"\n"A Polymeric Nanocapsule and a Method of Synthesis Thereof","Dr. Pradip Paik, Sukanya Patra","583005"'
                 }
             ],
-            "February 2026": [
-                // { title: "Some Table", url: "https://docs.google.com/spreadsheets/.../pub?output=csv" }
-            ]
+            "February 2026": []
         };
 
         let state = {
@@ -315,7 +315,7 @@
             themeIcon: document.getElementById('theme-icon'),
             categoriesContainer: document.getElementById('categories-container'),
             articlesFeed: document.getElementById('articles-feed'),
-            tablesContainer: document.getElementById('tables-container'), // New element
+            tablesContainer: document.getElementById('tables-container'),
             sidebarWidgets: document.getElementById('sidebar-widgets'),
             emptyState: document.getElementById('empty-state'),
             emptyStateTitle: document.getElementById('empty-state-title'),
@@ -386,7 +386,6 @@
             return results;
         }
 
-        // Dedicated Parser for Tables
         function parseTableCSV(text) {
             const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
             if (lines.length < 1) return { headers: [], rows: [] };
@@ -407,13 +406,11 @@
                 DOM.loadingState.classList.remove('hidden');
                 DOM.mainContent.classList.add('hidden');
 
-                // Get the main article URL for the currently selected edition
                 const currentUrl = EDITION_SOURCES[state.activeEdition];
                 if (!currentUrl) {
                     throw new Error("No Google Sheet link provided for this edition.");
                 }
 
-                // Fetch Main Articles
                 const response = await fetch(currentUrl);
                 if (!response.ok) throw new Error("Network response was not ok");
                 const csvText = await response.text();
@@ -422,7 +419,6 @@
                 const uniqueCategories = [...new Set(state.articles.map(a => a.Category))];
                 state.categories = uniqueCategories;
 
-                // Fetch Additional Tables for this edition
                 await fetchTablesForEdition(state.activeEdition);
 
                 updateUI();
@@ -559,7 +555,6 @@
         function renderTables() {
             DOM.tablesContainer.innerHTML = '';
             
-            // Logic: Show tables on "All" OR if category includes "Research & Development" (or simply "Research")
             const isResearchSelected = state.selectedCategories.some(cat => cat.toLowerCase().includes("research"));
             const shouldShowTables = state.selectedCategories.includes("All") || isResearchSelected;
 
@@ -567,20 +562,21 @@
                 DOM.tablesContainer.classList.remove('hidden');
                 
                 state.tablesData.forEach(table => {
+                    // Adjusted container constraints to ensure perfect mobile rendering
                     const tableHTML = `
-                        <div class="bg-white dark:bg-[#1e1e1e] rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.05)] border border-gray-100 dark:border-gray-800 p-6 md:p-8 overflow-hidden">
-                            <h3 class="font-serif font-bold text-xl md:text-2xl text-gray-900 dark:text-brand-gold mb-6">${table.title}</h3>
-                            <div class="overflow-x-auto no-scrollbar">
-                                <table class="w-full text-left text-sm text-gray-600 dark:text-gray-300">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                        <div class="bg-white dark:bg-[#1e1e1e] rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.05)] border border-gray-100 dark:border-gray-800 p-4 md:p-8 overflow-hidden w-full">
+                            <h3 class="font-serif font-bold text-lg md:text-2xl text-gray-900 dark:text-brand-gold mb-4 md:mb-6">${table.title}</h3>
+                            <div class="w-full overflow-x-auto no-scrollbar block">
+                                <table class="w-full min-w-full text-left text-xs md:text-sm text-gray-600 dark:text-gray-300">
+                                    <thead class="text-[10px] md:text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                                         <tr>
-                                            ${table.headers.map(h => `<th class="px-4 py-3 whitespace-nowrap">${h}</th>`).join('')}
+                                            ${table.headers.map(h => `<th class="px-3 md:px-4 py-2 md:py-3 whitespace-nowrap">${h}</th>`).join('')}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         ${table.rows.map(row => `
                                             <tr class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                                ${row.map(cell => `<td class="px-4 py-4 min-w-[150px]">${cell}</td>`).join('')}
+                                                ${row.map(cell => `<td class="px-3 md:px-4 py-3 md:py-4 min-w-[120px] md:min-w-[150px]">${cell}</td>`).join('')}
                                             </tr>
                                         `).join('')}
                                     </tbody>
@@ -810,7 +806,10 @@
             setTimeout(() => DOM.modalContentContainer.classList.add('modal-content-active'), 10);
             document.body.style.overflow = 'hidden';
             
-            DOM.modalContentContainer.querySelector('.overflow-y-auto').scrollTo(0,0);
+            // Ensures both container and main view scroll to top correctly across mobile and desktop
+            DOM.modalContentContainer.scrollTo(0,0);
+            const mainViewScroll = DOM.modalContentContainer.querySelector('.lg\\:overflow-y-auto');
+            if(mainViewScroll) mainViewScroll.scrollTo(0,0);
         }
 
         window.switchModalArticle = function(id) {
