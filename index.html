@@ -190,10 +190,10 @@
     </main>
 
     <!-- SAIC FOOTER -->
-    <footer class="bg-brand-purple text-white font-montserrat mt-12 border-t-4 border-brand-gold">
+    <footer class="bg-[#9E5192] text-white font-montserrat mt-12 border-t-4 border-brand-gold">
         <div class="max-w-7xl mx-auto px-6 py-10">
             <!-- Top Banner -->
-            <div class="bg-brand-darkPurple rounded-xl p-6 text-center mb-10 shadow-inner border border-white/10">
+            <div class="bg-[#701462] rounded-xl p-6 text-center mb-10 shadow-inner border border-white/10">
                 <p class="text-[11px] md:text-xs leading-relaxed max-w-4xl mx-auto text-gray-200">
                     SAIC is grateful to the Director, Dean (Resource & Alumni), Alumni Associations, and the entire IIT (BHU) fraternity for their constant support and blessings. We look forward to your valuable feedback. To share information for future editions, reach us at <a href="mailto:alumnicell@iitbhu.ac.in" class="text-brand-gold hover:underline">alumnicell@iitbhu.ac.in</a>.
                 </p>
@@ -204,7 +204,7 @@
                 
                 <!-- Contact Info -->
                 <div class="flex flex-col gap-3">
-                    <h4 class="text-sm md:text-base font-bold tracking-widest text-brand-gold uppercase">Contact</h4>
+                    <h4 class="text-sm md:text-base font-bold tracking-widest text-[#F4DEC4] uppercase">Contact</h4>
                     <div class="text-[11px] md:text-xs text-gray-300 space-y-1.5">
                         <p class="font-semibold text-white">Prof. Hiralal Pramanik,</p>
                         <p>Dean (Resource & Alumni)</p>
@@ -215,7 +215,7 @@
 
                 <!-- Connect With Us -->
                 <div class="flex flex-col items-center gap-4">
-                    <h4 class="text-sm md:text-base font-bold tracking-widest text-brand-gold uppercase">Connect With Us</h4>
+                    <h4 class="text-sm md:text-base font-bold tracking-widest text-[#F4DEC4] uppercase">Connect With Us</h4>
                     <div class="flex gap-3 justify-center">
                         <a href="https://www.linkedin.com/company/saic-iitbhu/" target="_blank" class="w-8 h-8 rounded-full bg-[#0077b5] flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="linkedin" class="w-4 h-4 text-white"></i></a>
                         <a href="https://www.facebook.com/saic.iitbhu" target="_blank" class="w-8 h-8 rounded-full bg-[#1877f2] flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="facebook" class="w-4 h-4 text-white"></i></a>
@@ -227,7 +227,7 @@
 
                 <!-- Newsletter Team -->
                 <div class="flex flex-col md:items-end gap-3 text-center md:text-right">
-                    <h4 class="text-sm md:text-base font-bold tracking-widest text-brand-gold uppercase">Newsletter Team, SAIC</h4>
+                    <h4 class="text-sm md:text-base font-bold tracking-widest text-[#F4DEC4] uppercase">Newsletter Team, SAIC</h4>
                     <div class="text-[11px] md:text-xs text-gray-300 leading-relaxed max-w-xs mx-auto md:mx-0">
                         <a href="https://www.linkedin.com/in/dhruv-bhandari-41a771377/" target="_blank" class="hover:text-brand-gold transition-colors">Dhruv Bhandari</a>, 
                         <a href="#" class="hover:text-brand-gold transition-colors">Hrushikesh Tayade</a>, <br/>
@@ -563,6 +563,7 @@
             } else {
                 DOM.emptyState.classList.add('hidden');
 
+                // Render main feed items
                 filtered.forEach((article, index) => {
                     // MAIN FEED CARDS (Matching the Screenshot Design)
                     const feedHTML = `
@@ -596,23 +597,35 @@
                         </article>
                     `;
                     DOM.articlesFeed.insertAdjacentHTML('beforeend', feedHTML);
-
-                    // SIDEBAR WIDGETS (Only visible when Specific Category selected)
-                    const sidebarHTML = `
-                        <div onclick="openModal(${article.id})" class="cursor-pointer group flex gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700">
-                            <div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-gray-200 relative">
-                                <img src="${article.Image_URL}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=200&q=80'"/>
-                            </div>
-                            <div class="flex flex-col justify-center">
-                                <span class="text-[10px] font-bold text-brand-gold uppercase tracking-wider mb-1">${article.Category}</span>
-                                <h4 class="font-serif font-bold text-gray-900 dark-text text-sm leading-tight line-clamp-2 group-hover:text-brand-purple transition-colors">
-                                    ${article.Headline}
-                                </h4>
-                            </div>
-                        </div>
-                    `;
-                    DOM.sidebarWidgets.insertAdjacentHTML('beforeend', sidebarHTML);
                 });
+
+                // Render Sidebar Items - ONLY articles from other categories
+                if (!state.selectedCategories.includes("All")) {
+                    const otherArticles = state.articles.filter(a => !state.selectedCategories.includes(a.Category));
+                    
+                    if (otherArticles.length > 0) {
+                        otherArticles.forEach(article => {
+                            // SIDEBAR WIDGETS
+                            const sidebarHTML = `
+                                <div onclick="openModal(${article.id})" class="cursor-pointer group flex gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700">
+                                    <div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-gray-200 relative">
+                                        <img src="${article.Image_URL}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=200&q=80'"/>
+                                    </div>
+                                    <div class="flex flex-col justify-center">
+                                        <span class="text-[10px] font-bold text-brand-gold uppercase tracking-wider mb-1">${article.Category}</span>
+                                        <h4 class="font-serif font-bold text-gray-900 dark-text text-sm leading-tight line-clamp-2 group-hover:text-brand-purple transition-colors">
+                                            ${article.Headline}
+                                        </h4>
+                                    </div>
+                                </div>
+                            `;
+                            DOM.sidebarWidgets.insertAdjacentHTML('beforeend', sidebarHTML);
+                        });
+                    } else {
+                        DOM.sidebarWidgets.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">No other news currently available.</p>';
+                    }
+                }
+                
                 lucide.createIcons();
             }
         }
