@@ -98,19 +98,18 @@
             </div>
         </div>
 
-        <!-- 2. Clean Image Banner (Bulletproof anti-cropping logic applied via inline CSS) -->
-        <div class="w-full bg-brand-darkPurple flex justify-center items-center">
+        <!-- 2. Clean Image Banner (Fully responsive, no cropping constraints) -->
+        <div class="w-full bg-brand-darkPurple">
             <img 
                 src="https://ik.imagekit.io/fcua6x8jl/fin2.png?updatedAt=1778678921778" 
                 alt="Alma Communiqué Header Banner" 
-                style="width: 100%; height: auto; max-height: 800px; object-fit: contain; display: block;"
-                onerror="this.src='https://i.ibb.co/JFrFhtD2/unnamed.png'"
+                class="w-full h-auto block"
             />
         </div>
 
         <!-- 3. Categories Bubble Row -->
         <div class="w-full bg-white dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-gray-800 shadow-sm relative z-20">
-            <div id="categories-container" class="max-w-7xl mx-auto px-6 py-4 flex justify-start md:justify-center gap-3 overflow-x-auto no-scrollbar">
+            <div id="categories-container" class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-start gap-3 overflow-x-auto no-scrollbar">
                 <!-- Dynamic categories go here -->
             </div>
         </div>
@@ -171,11 +170,25 @@
                 <div class="flex flex-col items-center gap-4">
                     <h4 class="text-sm md:text-base font-bold tracking-widest text-[#F4DEC4] uppercase">Connect With Us</h4>
                     <div class="flex gap-3 justify-center">
-                        <a href="https://www.linkedin.com/company/saic-iitbhu/" target="_blank" class="w-8 h-8 rounded-full bg-[#0077b5] flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="linkedin" class="w-4 h-4 text-white"></i></a>
-                        <a href="https://www.facebook.com/saic.iitbhu" target="_blank" class="w-8 h-8 rounded-full bg-[#1877f2] flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="facebook" class="w-4 h-4 text-white"></i></a>
-                        <a href="https://www.instagram.com/saic.iitbhu/" target="_blank" class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="instagram" class="w-4 h-4 text-white"></i></a>
-                        <a href="https://x.com/saic_iitbhu" target="_blank" class="w-8 h-8 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="twitter" class="w-4 h-4 text-white"></i></a>
-                        <a href="https://www.youtube.com/channel/UC1vEZGUjXp2YzbdI3rroNPg" target="_blank" class="w-8 h-8 rounded-full bg-[#ff0000] flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="youtube" class="w-4 h-4 text-white"></i></a>
+                        <!-- SOCIAL ICONS -->
+                        <!-- If you want to use your own custom logo image, simply replace the <i> tag below with an <img> tag -->
+                        <!-- Example: <img src="YOUR_IMAGE_LINK.png" alt="LinkedIn" class="w-4 h-4 object-contain invert" /> -->
+                        
+                        <a href="https://www.linkedin.com/company/saic-iitbhu/" target="_blank" class="w-8 h-8 rounded-full bg-[#0077b5] flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                            <i data-lucide="linkedin" class="w-4 h-4 text-white"></i>
+                        </a>
+                        <a href="https://www.facebook.com/saic.iitbhu" target="_blank" class="w-8 h-8 rounded-full bg-[#1877f2] flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                            <i data-lucide="facebook" class="w-4 h-4 text-white"></i>
+                        </a>
+                        <a href="https://www.instagram.com/saic.iitbhu/" target="_blank" class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                            <i data-lucide="instagram" class="w-4 h-4 text-white"></i>
+                        </a>
+                        <a href="https://x.com/saic_iitbhu" target="_blank" class="w-8 h-8 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                            <i data-lucide="twitter" class="w-4 h-4 text-white"></i>
+                        </a>
+                        <a href="https://www.youtube.com/channel/UC1vEZGUjXp2YzbdI3rroNPg" target="_blank" class="w-8 h-8 rounded-full bg-[#ff0000] flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                            <i data-lucide="youtube" class="w-4 h-4 text-white"></i>
+                        </a>
                     </div>
                 </div>
 
