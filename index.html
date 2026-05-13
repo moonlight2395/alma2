@@ -130,8 +130,14 @@
                     <p>Try adjusting your category or search filters.</p>
                 </div>
             </div>
+            
             <div id="articles-feed" class="flex flex-col gap-6">
                 <!-- Articles rendered via JS -->
+            </div>
+
+            <!-- DYNAMIC TABLES CONTAINER -->
+            <div id="tables-container" class="mt-8 flex flex-col gap-8 hidden">
+                <!-- Tables rendered via JS -->
             </div>
         </div>
 
@@ -170,10 +176,6 @@
                 <div class="flex flex-col items-center gap-4">
                     <h4 class="text-sm md:text-base font-bold tracking-widest text-[#F4DEC4] uppercase">Connect With Us</h4>
                     <div class="flex gap-3 justify-center">
-                        <!-- SOCIAL ICONS -->
-                        <!-- If you want to use your own custom logo image, simply replace the <i> tag below with an <img> tag -->
-                        <!-- Example: <img src="YOUR_IMAGE_LINK.png" alt="LinkedIn" class="w-4 h-4 object-contain invert" /> -->
-                        
                         <a href="https://www.linkedin.com/company/saic-iitbhu/" target="_blank" class="w-8 h-8 rounded-full bg-[#0077b5] flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
                             <i data-lucide="linkedin" class="w-4 h-4 text-white"></i>
                         </a>
@@ -262,10 +264,30 @@
         // ==========================================
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLlwZL6OhqHOG04uln2mtfA4C8RmS3fADrmCYd4qXRy8qBopqJ5RpkokcrDhyCF26TQIPzKNXhDNU6/pub?output=csv";
 
+        // DYNAMIC TABLES ENGINE: 
+        // Just paste your published CSV links here for each edition!
+        // To help you preview, I have pre-filled March 2026 with the actual data from your PDF using inline data.
+        const EDITION_TABLES = {
+            "March 2026": [
+                {
+                    title: "Patents Filed in March",
+                    url: 'data:text/csv;charset=utf-8,"Title","Faculty","Filing Date"\n"A Process for Producing High Phase Purity Alpha-Silicon Nitride Powder","Dr. Kundan Kumar, Aryan Yadav, Dr. Mithun Palit","09/03/2026"\n"System and Method for AI-Based BPPV Maneuver Guidance Using Head-Pose Detection","Dr. Ajay Pratap, Dr. Deepika Joshi, Neetu Rani Dhiman, Nikita Sharma, Himanshu Singh","11/03/2026"\n"A Rechargeable Zinc Air Battery","Dr. Ashish Kumar Mishra, V. Ganesan, Varsha Singh, Mr. Rohit Kumar Gupta","13/03/2026"\n"Method of Preparation of a Perlin Aldehydes","Dr. Deepak Kumar, Ms. Pallavi Saha, Ms. Sunaina Kamboj","23/03/2026"'
+                },
+                {
+                    title: "Patents Granted in March",
+                    url: 'data:text/csv;charset=utf-8,"Title","Faculty","Patent Number"\n"A System and Method for Electrochemical Detection and Quantification of Cell Characteristics and Functions","Dr. Marshal, Juhi Jaiswal","582290"\n"A Heterocyclic Derivative and a Method of Synthesis Thereof","Sushil Kumar Singh, Ashok Kumar, Nilesh Gajanan Bajad","582450"\n"An IoT-Enabled System and Method for Aquatic Life Management","Dr. Prasenjit Chanak, Mr. Nuthan Chingcetham, Prof. Pramod Kumar Jain","582592"\n"A Polymeric Nanocapsule and a Method of Synthesis Thereof","Dr. Pradip Paik, Sukanya Patra","583005"'
+                }
+            ],
+            "February 2026": [
+                // { title: "Some Table", url: "https://docs.google.com/spreadsheets/.../pub?output=csv" }
+            ]
+        };
+
         let state = {
             activeEdition: "March 2026",
             editionsList: ["March 2026", "February 2026", "Centenary Special"],
             articles: [],
+            tablesData: [],
             categories: [],
             selectedCategories: ["All"],
             searchQuery: "",
@@ -287,6 +309,7 @@
             themeIcon: document.getElementById('theme-icon'),
             categoriesContainer: document.getElementById('categories-container'),
             articlesFeed: document.getElementById('articles-feed'),
+            tablesContainer: document.getElementById('tables-container'), // New element
             sidebarWidgets: document.getElementById('sidebar-widgets'),
             emptyState: document.getElementById('empty-state'),
             emptyStateTitle: document.getElementById('empty-state-title'),
@@ -325,7 +348,6 @@
             await fetchGoogleSheetData();
         }
 
-        // CSV Parser that handles quotes and commas correctly
         function parseCSV(text) {
             const lines = text.split(/\r?\n/);
             if (lines.length < 2) return [];
@@ -358,30 +380,45 @@
             return results;
         }
 
+        // Dedicated Parser for Tables
+        function parseTableCSV(text) {
+            const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+            if (lines.length < 1) return { headers: [], rows: [] };
+
+            const splitRegex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+            const headers = lines[0].split(splitRegex).map(h => h.replace(/^"|"$/g, '').trim());
+            
+            const rows = [];
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(splitRegex).map(v => v.replace(/^"|"$/g, '').trim());
+                rows.push(values);
+            }
+            return { headers, rows };
+        }
+
         async function fetchGoogleSheetData() {
             try {
                 DOM.loadingState.classList.remove('hidden');
                 DOM.mainContent.classList.add('hidden');
 
+                // Fetch Main Articles
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
                 if (!response.ok) throw new Error("Network response was not ok");
-                
                 const csvText = await response.text();
-                const parsedData = parseCSV(csvText);
-                
-                state.articles = parsedData;
+                state.articles = parseCSV(csvText);
 
-                const uniqueCategories = [...new Set(parsedData.map(a => a.Category))];
+                const uniqueCategories = [...new Set(state.articles.map(a => a.Category))];
                 state.categories = uniqueCategories;
+
+                // Fetch Additional Tables for this edition
+                await fetchTablesForEdition(state.activeEdition);
 
                 updateUI();
             } catch (error) {
-                console.error("Error fetching data, using fallback:", error);
-                
+                console.error("Error fetching data:", error);
                 DOM.emptyStateTitle.textContent = "Failed to load data from Google Sheets.";
                 DOM.emptyStateTitle.classList.replace('text-gray-500', 'text-red-500');
                 DOM.emptyStateTitle.classList.replace('dark:text-gray-400', 'dark:text-red-400');
-                
                 DOM.emptyStateMessage.innerHTML = `
                     <p class="font-bold mb-2 text-gray-700 dark:text-gray-300">To fix this issue:</p>
                     <ol class="list-decimal text-left text-xs md:text-sm space-y-2 max-w-sm mx-auto text-gray-600 dark:text-gray-400">
@@ -390,11 +427,33 @@
                         <li>Select "Entire Document" and "Comma-separated values (.csv)", then click Publish.</li>
                     </ol>
                 `;
-                
                 DOM.emptyState.classList.remove('hidden');
             } finally {
                 DOM.loadingState.classList.add('hidden');
                 DOM.mainContent.classList.remove('hidden');
+            }
+        }
+
+        async function fetchTablesForEdition(edition) {
+            state.tablesData = [];
+            const tablesConfig = EDITION_TABLES[edition];
+            
+            if (!tablesConfig || tablesConfig.length === 0) return;
+
+            for (const table of tablesConfig) {
+                if (!table.url) continue;
+                try {
+                    const res = await fetch(table.url);
+                    if (res.ok) {
+                        const csv = await res.text();
+                        const parsed = parseTableCSV(csv);
+                        if(parsed.headers.length > 0) {
+                            state.tablesData.push({ title: table.title, headers: parsed.headers, rows: parsed.rows });
+                        }
+                    }
+                } catch(e) {
+                    console.log(`Failed to fetch table: ${table.title}`, e);
+                }
             }
         }
 
@@ -404,6 +463,7 @@
         function updateUI() {
             renderCategories();
             renderArticles();
+            renderTables();
         }
 
         function renderEditionMenu() {
@@ -481,6 +541,45 @@
                 );
             }
             return result;
+        }
+
+        function renderTables() {
+            DOM.tablesContainer.innerHTML = '';
+            
+            // Logic: Show tables on "All" OR if category includes "Research & Development" (or simply "Research")
+            const isResearchSelected = state.selectedCategories.some(cat => cat.toLowerCase().includes("research"));
+            const shouldShowTables = state.selectedCategories.includes("All") || isResearchSelected;
+
+            if (shouldShowTables && state.tablesData.length > 0) {
+                DOM.tablesContainer.classList.remove('hidden');
+                
+                state.tablesData.forEach(table => {
+                    const tableHTML = `
+                        <div class="bg-white dark:bg-[#1e1e1e] rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.05)] border border-gray-100 dark:border-gray-800 p-6 md:p-8 overflow-hidden">
+                            <h3 class="font-serif font-bold text-xl md:text-2xl text-gray-900 dark:text-brand-gold mb-6">${table.title}</h3>
+                            <div class="overflow-x-auto no-scrollbar">
+                                <table class="w-full text-left text-sm text-gray-600 dark:text-gray-300">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                                        <tr>
+                                            ${table.headers.map(h => `<th class="px-4 py-3 whitespace-nowrap">${h}</th>`).join('')}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${table.rows.map(row => `
+                                            <tr class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                                ${row.map(cell => `<td class="px-4 py-4 min-w-[150px]">${cell}</td>`).join('')}
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    DOM.tablesContainer.insertAdjacentHTML('beforeend', tableHTML);
+                });
+            } else {
+                DOM.tablesContainer.classList.add('hidden');
+            }
         }
 
         function renderArticles() {
