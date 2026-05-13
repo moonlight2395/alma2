@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alma Communiqué</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#6F265D',
+                            darkPurple: '#4A193E',
+                            cream: '#FDF9EE',
+                            red: '#B83A42',
+                            gold: '#F4B223',
+                            bubbleBg: '#701462',
+                            bubbleText: '#F4DEC4'
+                        }
+                    },
+                    fontFamily: {
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Dark Mode Overrides */
+        html.dark body { background-color: #121212; color: #e5e7eb; }
+        html.dark .dark-card { background-color: #1e1e1e; border-color: #2d2d2d; }
+        html.dark .dark-text { color: #f3f4f6; }
+        html.dark .dark-text-muted { color: #9ca3af; }
+        html.dark .dark-header { background-color: #1a1a1a; border-color: #2d2d2d; }
+        
+        /* Modal Transitions */
+        .modal-active { opacity: 1 !important; pointer-events: auto !important; }
+        .modal-content-active { transform: scale(1) translateY(0) !important; opacity: 1 !important; }
+        
+        /* Hexagon Clip Path for Header */
+        .hex-clip {
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+        }
+        
+        /* Dotted Pattern Background */
+        .dotted-bg {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.15) 2px, transparent 2px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="text-gray-900 relative bg-gray-50">
+
+    <!-- GOLDEN PROGRESS BAR -->
+    <div class="fixed top-0 left-0 w-full h-1.5 bg-gray-200 z-[100] dark:bg-gray-800">
+        <div id="progress-bar" class="h-full bg-brand-gold transition-all duration-150 ease-out" style="width: 0%"></div>
+    </div>
+
+    <!-- CUSTOM HERO HEADER -->
+    <header class="relative bg-brand-purple dotted-bg overflow-hidden shadow-lg w-full">
+        <!-- Floating Navigation Bar -->
+        <div class="absolute top-0 w-full z-50 px-6 py-4 flex justify-between items-center bg-black/20 backdrop-blur-sm">
+            <!-- Left: Edition Dropdown -->
+            <div class="relative">
+                <button id="edition-btn" class="flex items-center gap-2 text-white hover:bg-white/10 px-4 py-2 rounded-xl transition-colors border border-white/20 backdrop-blur-md shadow-sm">
+                    <i data-lucide="calendar" class="w-4 h-4 text-white/80"></i>
+                    <span class="font-montserrat font-bold text-sm flex items-center gap-1">
+                        <span id="active-edition-label">Latest Edition</span> 
+                        <i data-lucide="chevron-down" id="edition-chevron" class="w-4 h-4 transition-transform duration-300"></i>
+                    </span>
+                </button>
+                <div id="edition-menu" class="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50 hidden opacity-0 transition-opacity duration-200">
+                    <div class="px-4 py-2 bg-gray-50 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                        Select Edition
+                    </div>
+                    <div id="edition-options">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Dark Mode & Search -->
+            <div class="flex items-center gap-3">
+                <div id="search-container" class="relative hidden opacity-0 transition-opacity duration-300">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                    <input type="text" id="search-input" placeholder="Search news..." class="w-48 md:w-64 bg-white/90 text-gray-900 text-sm rounded-full py-2.5 pl-9 pr-4 outline-none focus:ring-2 focus:ring-brand-gold transition-all shadow-lg" />
+                </div>
+                <button id="search-btn" class="p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-sm" aria-label="Toggle Search">
+                    <i data-lucide="search" id="search-icon" class="w-5 h-5"></i>
+                </button>
+                <button id="theme-toggle" class="p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-sm" aria-label="Toggle Dark Mode">
+                    <i data-lucide="moon" id="theme-icon" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Header Content -->
+        <div class="max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-16 flex flex-col md:flex-row items-center gap-8 md:gap-12 relative z-10">
+            
+            <!-- Left Side: Title & Logos -->
+            <div class="flex-1 flex flex-col items-center md:items-start text-center md:text-left z-20">
+                <img src="https://i.ibb.co/JFrFhtD2/unnamed.png" alt="IIT BHU & SAIC Logos" class="h-16 md:h-20 mb-8 object-contain bg-white/90 p-2 rounded-lg shadow-md" />
+                
+                <div class="bg-brand-cream border-[4px] border-brand-red p-6 md:p-8 shadow-2xl relative w-full max-w-lg transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+                    <h1 class="font-montserrat text-4xl md:text-6xl font-black text-brand-purple tracking-tighter leading-none mb-2">
+                        ALMA<br/>COMMUNIQUÉ
+                    </h1>
+                    <p class="font-montserrat text-brand-red font-bold text-lg md:text-xl tracking-wide">
+                        Alumni Newsletter (<span id="header-edition-text">Loading...</span>)
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Side: Hexagon Image Grid -->
+            <div class="flex-1 w-full flex justify-center md:justify-end relative h-64 md:h-96 z-10 hidden sm:flex">
+                <div class="absolute w-40 h-40 md:w-48 md:h-48 hex-clip bg-gray-200 right-0 top-0 transform translate-x-4 -translate-y-4 shadow-xl border-4 border-white">
+                    <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80" alt="Campus" class="w-full h-full object-cover"/>
+                </div>
+                <div class="absolute w-40 h-40 md:w-48 md:h-48 hex-clip bg-gray-200 right-32 top-20 md:right-40 md:top-24 shadow-xl border-4 border-white z-10">
+                    <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80" alt="Students" class="w-full h-full object-cover"/>
+                </div>
+                <div class="absolute w-40 h-40 md:w-48 md:h-48 hex-clip bg-gray-200 right-16 top-40 md:right-20 md:top-48 shadow-xl border-4 border-white">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80" alt="Library" class="w-full h-full object-cover"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- CATEGORIES BUBBLE ROW -->
+        <div class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm relative z-20">
+            <div id="categories-container" class="max-w-7xl mx-auto px-6 py-4 flex justify-start md:justify-center gap-3 overflow-x-auto no-scrollbar">
+                <!-- Dynamic categories go here -->
+            </div>
+        </div>
+    </header>
+
+    <!-- LOADING STATE -->
+    <div id="loading-state" class="flex flex-col items-center justify-center py-20">
+        <div class="w-12 h-12 border-4 border-brand-purple border-t-brand-gold rounded-full animate-spin mb-4"></div>
+        <p class="font-montserrat font-bold text-gray-500 dark:text-gray-400">Loading live data from Google Sheets...</p>
+    </div>
+
+    <!-- MAIN FEED -->
+    <main id="main-content" class="max-w-7xl mx-auto px-4 md:px-8 py-10 flex flex-col lg:flex-row gap-8 hidden">
+        
+        <!-- Left Column: Main News Feed -->
+        <div id="feed-column" class="w-full lg:w-2/3 flex flex-col gap-6 transition-all duration-300">
+            <div id="empty-state" class="hidden text-center text-gray-400 py-16 bg-white dark:bg-[#1e1e1e] rounded-2xl border border-gray-100 dark:border-gray-800">
+                <i data-lucide="search" class="w-12 h-12 mx-auto mb-4 opacity-20"></i>
+                <h3 id="empty-state-title" class="text-xl font-serif text-gray-500 dark:text-gray-400">No articles found</h3>
+                <div id="empty-state-message" class="text-sm mt-2 flex flex-col gap-1 items-center">
+                    <p>Try adjusting your category or search filters.</p>
+                </div>
+            </div>
+            <div id="articles-feed" class="flex flex-col gap-6">
+                <!-- Articles rendered via JS -->
+            </div>
+        </div>
+
+        <!-- Right Column: Sidebar Widgets -->
+        <div id="sidebar-column" class="w-full lg:w-1/3 flex flex-col gap-6 transition-all duration-300">
+            <div class="sticky top-24 bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+                <h3 class="font-montserrat font-bold text-lg text-brand-purple dark:text-brand-gold mb-4 flex items-center gap-2">
+                    <i data-lucide="trending-up" class="w-5 h-5"></i> More in this Edition
+                </h3>
+                <div id="sidebar-widgets" class="flex flex-col gap-4 max-h-[70vh] overflow-y-auto no-scrollbar pr-2">
+                    <!-- Sidebar Items rendered via JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SAIC FOOTER -->
+    <footer class="bg-brand-purple text-white font-montserrat mt-12 border-t-4 border-brand-gold">
+        <div class="max-w-7xl mx-auto px-6 py-10">
+            <!-- Top Banner -->
+            <div class="bg-brand-darkPurple rounded-xl p-6 text-center mb-10 shadow-inner border border-white/10">
+                <p class="text-[11px] md:text-xs leading-relaxed max-w-4xl mx-auto text-gray-200">
+                    SAIC is grateful to the Director, Dean (Resource & Alumni), Alumni Associations, and the entire IIT (BHU) fraternity for their constant support and blessings. We look forward to your valuable feedback. To share information for future editions, reach us at <a href="mailto:alumnicell@iitbhu.ac.in" class="text-brand-gold hover:underline">alumnicell@iitbhu.ac.in</a>.
+                </p>
+            </div>
+
+            <!-- Footer Columns -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                
+                <!-- Contact Info -->
+                <div class="flex flex-col gap-3">
+                    <h4 class="text-sm md:text-base font-bold tracking-widest text-brand-gold uppercase">Contact</h4>
+                    <div class="text-[11px] md:text-xs text-gray-300 space-y-1.5">
+                        <p class="font-semibold text-white">Prof. Hiralal Pramanik,</p>
+                        <p>Dean (Resource & Alumni)</p>
+                        <p><a href="mailto:dora@iitbhu.ac.in" class="hover:text-white transition-colors">dora@iitbhu.ac.in</a></p>
+                        <p><a href="mailto:alumnicell@iitbhu.ac.in" class="hover:text-white transition-colors">alumnicell@iitbhu.ac.in</a></p>
+                    </div>
+                </div>
+
+                <!-- Connect With Us -->
+                <div class="flex flex-col items-center gap-4">
+                    <h4 class="text-sm md:text-base font-bold tracking-widest text-brand-gold uppercase">Connect With Us</h4>
+                    <div class="flex gap-3 justify-center">
+                        <a href="https://www.linkedin.com/company/saic-iitbhu/" target="_blank" class="w-8 h-8 rounded-full bg-[#0077b5] flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="linkedin" class="w-4 h-4 text-white"></i></a>
+                        <a href="https://www.facebook.com/saic.iitbhu" target="_blank" class="w-8 h-8 rounded-full bg-[#1877f2] flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="facebook" class="w-4 h-4 text-white"></i></a>
+                        <a href="https://www.instagram.com/saic.iitbhu/" target="_blank" class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="instagram" class="w-4 h-4 text-white"></i></a>
+                        <a href="https://x.com/saic_iitbhu" target="_blank" class="w-8 h-8 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="twitter" class="w-4 h-4 text-white"></i></a>
+                        <a href="https://www.youtube.com/channel/UC1vEZGUjXp2YzbdI3rroNPg" target="_blank" class="w-8 h-8 rounded-full bg-[#ff0000] flex items-center justify-center hover:scale-110 transition-transform shadow-lg"><i data-lucide="youtube" class="w-4 h-4 text-white"></i></a>
+                    </div>
+                </div>
+
+                <!-- Newsletter Team -->
+                <div class="flex flex-col md:items-end gap-3 text-center md:text-right">
+                    <h4 class="text-sm md:text-base font-bold tracking-widest text-brand-gold uppercase">Newsletter Team, SAIC</h4>
+                    <div class="text-[11px] md:text-xs text-gray-300 leading-relaxed max-w-xs mx-auto md:mx-0">
+                        <a href="https://www.linkedin.com/in/dhruv-bhandari-41a771377/" target="_blank" class="hover:text-brand-gold transition-colors">Dhruv Bhandari</a>, 
+                        <a href="#" class="hover:text-brand-gold transition-colors">Hrushikesh Tayade</a>, <br/>
+                        <a href="#" class="hover:text-brand-gold transition-colors">Ishita Singh</a>, 
+                        <a href="https://www.linkedin.com/in/nishtha-meratwal-90b22237b/" target="_blank" class="hover:text-brand-gold transition-colors">Nishtha Meratwal</a>, <br/>
+                        <a href="https://www.linkedin.com/in/amit-dubey-7ba89b367/" target="_blank" class="hover:text-brand-gold transition-colors">Amit Dubey</a>, 
+                        <a href="https://www.linkedin.com/in/anjali-khare-b63512320" target="_blank" class="hover:text-brand-gold transition-colors">Anjali Khare</a>, 
+                        <a href="https://www.linkedin.com/in/ashima-verma-3j2006" target="_blank" class="hover:text-brand-gold transition-colors">Ashima Verma</a>, <br/>
+                        <a href="https://www.linkedin.com/in/divya-kirti-mukund-rai-777946314" target="_blank" class="hover:text-brand-gold transition-colors">Divya Kirti Mukund Rai</a>, <br/>
+                        <a href="https://www.linkedin.com/in/anushka-kumari-a8bbb9298" target="_blank" class="hover:text-brand-gold transition-colors">Anushka Kumari</a>, 
+                        <a href="https://www.linkedin.com/in/pentyala-abhishek-preetham" target="_blank" class="hover:text-brand-gold transition-colors">Pentyala Abhishek Preetham</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- DESKTOP FULL ARTICLE MODAL -->
+    <div id="article-modal" class="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm transition-all duration-300 opacity-0 pointer-events-none">
+        <div id="modal-bg-overlay" class="absolute inset-0 cursor-pointer"></div>
+        
+        <div id="modal-content-container" class="bg-white dark:bg-[#121212] w-full max-w-6xl h-[95vh] rounded-2xl shadow-2xl flex flex-col lg:flex-row relative transform scale-95 translate-y-8 opacity-0 transition-all duration-500 ease-out z-10 overflow-hidden border border-gray-200 dark:border-gray-800">
+            
+            <button id="close-modal-btn" class="absolute top-4 right-4 z-50 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-all hover:rotate-90 backdrop-blur-md">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Main Article View (Left 2/3) -->
+            <div class="w-full lg:w-2/3 h-full flex flex-col overflow-y-auto no-scrollbar relative border-r border-gray-200 dark:border-gray-800">
+                <div class="w-full h-64 md:h-80 relative bg-gray-200 shrink-0">
+                    <img id="modal-image" src="" alt="Article Cover" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span id="modal-category" class="bg-brand-gold text-brand-purple text-xs font-bold px-3 py-1 rounded-sm uppercase tracking-wider shadow-sm"></span>
+                            <span id="modal-date" class="text-xs font-semibold text-white/90 uppercase tracking-widest drop-shadow-md"></span>
+                        </div>
+                        <h1 id="modal-headline" class="text-2xl md:text-4xl font-serif font-black text-white leading-tight drop-shadow-lg"></h1>
+                    </div>
+                </div>
+                
+                <div class="p-6 md:p-10 flex-1 bg-white dark:bg-[#121212]">
+                    <div id="modal-body" class="prose prose-lg dark:prose-invert prose-blue max-w-none text-gray-700 dark:text-gray-300 leading-relaxed space-y-6 font-serif">
+                        <!-- Content Injected -->
+                    </div>
+                    <!-- External Link Button container -->
+                    <div id="modal-external-link-container" class="mt-10 hidden">
+                        <a id="modal-external-link" href="#" target="_blank" class="inline-flex items-center gap-2 bg-brand-gold hover:bg-yellow-500 text-brand-purple font-montserrat font-bold py-3 px-6 rounded-xl transition-transform hover:scale-105 shadow-md">
+                            Read Full External Article <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More News Sidebar (Right 1/3) -->
+            <div class="w-full lg:w-1/3 h-full bg-gray-50 dark:bg-[#1a1a1a] flex flex-col">
+                <div class="p-6 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1e1e]">
+                    <h3 class="font-montserrat font-bold text-lg text-brand-purple dark:text-brand-gold">More in this Edition</h3>
+                </div>
+                <div id="modal-sidebar" class="flex-1 overflow-y-auto no-scrollbar p-4 flex flex-col gap-3">
+                    <!-- Dynamic Items -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // ==========================================
+        // DATA CONFIGURATION
+        // ==========================================
+        // Used pub?output=csv URL to bypass CORS and get raw data from the published sheet
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLlwZL6OhqHOG04uln2mtfA4C8RmS3fADrmCYd4qXRy8qBopqJ5RpkokcrDhyCF26TQIPzKNXhDNU6/pub?output=csv";
+
+        let state = {
+            activeEdition: "March 2026",
+            editionsList: ["March 2026", "February 2026", "Centenary Special"],
+            articles: [],
+            categories: [],
+            selectedCategories: ["All"],
+            searchQuery: "",
+            isSearchActive: false,
+            isDarkMode: localStorage.getItem('darkMode') === 'true'
+        };
+
+        const DOM = {
+            editionBtn: document.getElementById('edition-btn'),
+            editionMenu: document.getElementById('edition-menu'),
+            editionOptions: document.getElementById('edition-options'),
+            editionLabel: document.getElementById('active-edition-label'),
+            headerEditionText: document.getElementById('header-edition-text'),
+            editionChevron: document.getElementById('edition-chevron'),
+            searchBtn: document.getElementById('search-btn'),
+            searchContainer: document.getElementById('search-container'),
+            searchInput: document.getElementById('search-input'),
+            searchIcon: document.getElementById('search-icon'),
+            themeToggle: document.getElementById('theme-toggle'),
+            themeIcon: document.getElementById('theme-icon'),
+            categoriesContainer: document.getElementById('categories-container'),
+            articlesFeed: document.getElementById('articles-feed'),
+            sidebarWidgets: document.getElementById('sidebar-widgets'),
+            emptyState: document.getElementById('empty-state'),
+            emptyStateTitle: document.getElementById('empty-state-title'),
+            emptyStateMessage: document.getElementById('empty-state-message'),
+            progressBar: document.getElementById('progress-bar'),
+            loadingState: document.getElementById('loading-state'),
+            mainContent: document.getElementById('main-content'),
+            feedColumn: document.getElementById('feed-column'),
+            sidebarColumn: document.getElementById('sidebar-column'),
+            
+            modal: document.getElementById('article-modal'),
+            modalContentContainer: document.getElementById('modal-content-container'),
+            modalBgOverlay: document.getElementById('modal-bg-overlay'),
+            closeModalBtn: document.getElementById('close-modal-btn'),
+            modalImage: document.getElementById('modal-image'),
+            modalCategory: document.getElementById('modal-category'),
+            modalDate: document.getElementById('modal-date'),
+            modalHeadline: document.getElementById('modal-headline'),
+            modalBody: document.getElementById('modal-body'),
+            modalSidebar: document.getElementById('modal-sidebar'),
+            modalExtLinkContainer: document.getElementById('modal-external-link-container'),
+            modalExtLink: document.getElementById('modal-external-link')
+        };
+
+        // ==========================================
+        // INITIALIZATION & DATA FETCHING
+        // ==========================================
+        async function init() {
+            applyTheme();
+            lucide.createIcons();
+            setupEventListeners();
+            renderEditionMenu();
+            
+            // Update labels
+            DOM.editionLabel.textContent = state.activeEdition;
+            DOM.headerEditionText.textContent = state.activeEdition;
+
+            await fetchGoogleSheetData();
+        }
+
+        // CSV Parser that handles quotes and commas correctly
+        function parseCSV(text) {
+            const lines = text.split(/\r?\n/);
+            if (lines.length < 2) return [];
+
+            const splitRegex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+            const headers = lines[0].split(splitRegex).map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
+            
+            const results = [];
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                const values = lines[i].split(splitRegex).map(v => v.replace(/^"|"$/g, '').trim());
+                let obj = { id: i };
+                headers.forEach((header, index) => {
+                    // Map generic spreadsheet columns to our specific keys
+                    if (header.includes('title') || header.includes('headline')) obj.Headline = values[index];
+                    else if (header.includes('short info') || header.includes('summary')) obj.Summary = values[index];
+                    else if (header.includes('entire content') || header.includes('full content')) obj.Full_Content = values[index];
+                    else if (header.includes('image link') || header.includes('image')) obj.Image_URL = values[index];
+                    else if (header.includes('link to article') || header.includes('link')) obj.External_Link = values[index];
+                    else if (header.includes('category') || header.includes('section')) obj.Category = values[index];
+                    else if (header.includes('date')) obj.Date = values[index];
+                    else obj[header] = values[index];
+                });
+                
+                // Fallbacks if columns were missing
+                if (!obj.Category) obj.Category = "General";
+                if (!obj.Date) obj.Date = "Recent";
+                if (!obj.Image_URL) obj.Image_URL = "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1000&q=80";
+
+                results.push(obj);
+            }
+            return results;
+        }
+
+        async function fetchGoogleSheetData() {
+            try {
+                DOM.loadingState.classList.remove('hidden');
+                DOM.mainContent.classList.add('hidden');
+
+                const response = await fetch(GOOGLE_SHEET_CSV_URL);
+                if (!response.ok) throw new Error("Network response was not ok");
+                
+                const csvText = await response.text();
+                const parsedData = parseCSV(csvText);
+                
+                state.articles = parsedData;
+
+                // Extract unique categories dynamically
+                const uniqueCategories = [...new Set(parsedData.map(a => a.Category))];
+                state.categories = uniqueCategories;
+
+                updateUI();
+            } catch (error) {
+                console.error("Error fetching data, using fallback:", error);
+                
+                // Detailed error message guiding the user
+                DOM.emptyStateTitle.textContent = "Failed to load data from Google Sheets.";
+                DOM.emptyStateTitle.classList.replace('text-gray-500', 'text-red-500');
+                DOM.emptyStateTitle.classList.replace('dark:text-gray-400', 'dark:text-red-400');
+                
+                DOM.emptyStateMessage.innerHTML = `
+                    <p class="font-bold mb-2 text-gray-700 dark:text-gray-300">To fix this issue:</p>
+                    <ol class="list-decimal text-left text-xs md:text-sm space-y-2 max-w-sm mx-auto text-gray-600 dark:text-gray-400">
+                        <li>Open your Google Sheet.</li>
+                        <li>Click <b>File &gt; Share &gt; Publish to web</b>.</li>
+                        <li>Select "Entire Document" and "Comma-separated values (.csv)", then click Publish.</li>
+                        <li>If you are opening this HTML file directly from your computer (file://), try using a different browser or running a local server.</li>
+                    </ol>
+                `;
+                
+                DOM.emptyState.classList.remove('hidden');
+            } finally {
+                DOM.loadingState.classList.add('hidden');
+                DOM.mainContent.classList.remove('hidden');
+            }
+        }
+
+        // ==========================================
+        // RENDER FUNCTIONS
+        // ==========================================
+        function updateUI() {
+            renderCategories();
+            renderArticles();
+        }
+
+        function renderEditionMenu() {
+            DOM.editionOptions.innerHTML = '';
+            state.editionsList.forEach(edition => {
+                const btn = document.createElement('button');
+                const isActive = state.activeEdition === edition;
+                btn.className = `w-full text-left px-4 py-3 text-sm transition-colors dark:text-gray-200 ${isActive ? 'bg-brand-cream dark:bg-gray-700 text-brand-purple font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-700'}`;
+                btn.textContent = edition;
+                btn.onclick = () => {
+                    // For demo: We just reload the same sheet but pretend it's a new edition
+                    state.activeEdition = edition;
+                    DOM.editionLabel.textContent = edition;
+                    DOM.headerEditionText.textContent = edition;
+                    toggleEditionMenu(false);
+                    renderEditionMenu(); 
+                    fetchGoogleSheetData(); 
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+                DOM.editionOptions.appendChild(btn);
+            });
+        }
+
+        function renderCategories() {
+            DOM.categoriesContainer.innerHTML = '';
+            
+            const allBtn = createCategoryButton("All", state.selectedCategories.includes("All"));
+            allBtn.onclick = () => handleCategoryToggle("All");
+            DOM.categoriesContainer.appendChild(allBtn);
+
+            state.categories.forEach(cat => {
+                const isSelected = state.selectedCategories.includes(cat) && !state.selectedCategories.includes("All");
+                const btn = createCategoryButton(cat, isSelected);
+                btn.onclick = () => handleCategoryToggle(cat);
+                DOM.categoriesContainer.appendChild(btn);
+            });
+        }
+
+        function createCategoryButton(text, isActive) {
+            const btn = document.createElement('button');
+            if (isActive) {
+                btn.className = `flex-shrink-0 px-6 py-2 rounded-full text-sm font-semibold transition-all shadow-md scale-105 bg-brand-bubbleBg text-brand-bubbleText border border-brand-bubbleBg`;
+            } else {
+                btn.className = `flex-shrink-0 px-6 py-2 rounded-full text-sm font-semibold transition-all shadow-sm scale-100 bg-white dark:bg-[#1e1e1e] text-brand-bubbleBg dark:text-brand-bubbleText border border-gray-200 dark:border-gray-700 hover:bg-brand-bubbleText hover:text-brand-bubbleBg hover:border-brand-bubbleText hover:scale-105`;
+            }
+            btn.textContent = text;
+            return btn;
+        }
+
+        function handleCategoryToggle(category) {
+            if (category === "All") {
+                state.selectedCategories = ["All"];
+            } else {
+                let newSelections = state.selectedCategories.filter(c => c !== "All");
+                if (newSelections.includes(category)) {
+                    newSelections = newSelections.filter(c => c !== category);
+                    if (newSelections.length === 0) newSelections = ["All"];
+                } else {
+                    newSelections.push(category);
+                }
+                state.selectedCategories = newSelections;
+            }
+            updateUI();
+        }
+
+        function getFilteredArticles() {
+            let result = state.articles;
+            if (!state.selectedCategories.includes("All")) {
+                result = result.filter(a => state.selectedCategories.includes(a.Category));
+            }
+            if (state.searchQuery.trim() !== "") {
+                const q = state.searchQuery.toLowerCase();
+                result = result.filter(a => 
+                    (a.Headline && a.Headline.toLowerCase().includes(q)) || 
+                    (a.Summary && a.Summary.toLowerCase().includes(q)) ||
+                    (a.Full_Content && a.Full_Content.toLowerCase().includes(q))
+                );
+            }
+            return result;
+        }
+
+        function renderArticles() {
+            DOM.articlesFeed.innerHTML = '';
+            DOM.sidebarWidgets.innerHTML = '';
+            const filtered = getFilteredArticles();
+            
+            // Adjust layouts based on 'All' vs 'Specific Category' selection
+            if (state.selectedCategories.includes("All")) {
+                DOM.sidebarColumn.classList.add('hidden');
+                DOM.feedColumn.classList.remove('lg:w-2/3');
+                DOM.feedColumn.classList.add('lg:w-full', 'max-w-4xl', 'mx-auto');
+            } else {
+                DOM.sidebarColumn.classList.remove('hidden');
+                DOM.feedColumn.classList.remove('lg:w-full', 'max-w-4xl', 'mx-auto');
+                DOM.feedColumn.classList.add('lg:w-2/3');
+            }
+
+            if (filtered.length === 0) {
+                // If it's already an error message from catch, don't overwrite it
+                if (!DOM.emptyStateTitle.textContent.includes("Failed")) {
+                    DOM.emptyStateTitle.textContent = "No articles found";
+                    DOM.emptyStateTitle.classList.replace('text-red-500', 'text-gray-500');
+                    DOM.emptyStateTitle.classList.replace('dark:text-red-400', 'dark:text-gray-400');
+                    DOM.emptyStateMessage.innerHTML = "<p>Try adjusting your category or search filters.</p>";
+                }
+                DOM.emptyState.classList.remove('hidden');
+            } else {
+                DOM.emptyState.classList.add('hidden');
+
+                filtered.forEach((article, index) => {
+                    // MAIN FEED CARDS (Matching the Screenshot Design)
+                    const feedHTML = `
+                        <article onclick="openModal(${article.id})" class="cursor-pointer group dark-card bg-white rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row overflow-hidden min-h-[220px]">
+                            <!-- Text Left -->
+                            <div class="p-6 md:p-8 flex-1 flex flex-col order-2 md:order-1 justify-center">
+                                <span class="text-[11px] md:text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest flex items-center gap-1.5 mb-3">
+                                    <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${article.Date}
+                                </span>
+                                <h2 class="font-serif font-bold text-gray-900 dark-text text-xl md:text-2xl leading-snug mb-3 group-hover:text-brand-purple dark:group-hover:text-brand-gold transition-colors">
+                                    ${article.Headline}
+                                </h2>
+                                <p class="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">
+                                    ${article.Summary}
+                                </p>
+                            </div>
+                            <!-- Image Right -->
+                            <div class="w-full md:w-2/5 h-56 md:h-auto bg-gray-200 relative order-1 md:order-2 overflow-hidden shrink-0">
+                                <img src="${article.Image_URL}" alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80'"/>
+                                
+                                <!-- Category Badge Top Right -->
+                                <div class="absolute top-4 right-4 bg-brand-gold text-brand-darkPurple text-[10px] font-extrabold px-3 py-1.5 rounded-sm uppercase tracking-widest shadow-sm z-10">
+                                    ${article.Category}
+                                </div>
+                                
+                                <!-- Circular Arrow Button Bottom Right -->
+                                <div class="absolute bottom-4 right-4 w-10 h-10 bg-blue-950 text-white rounded-full flex items-center justify-center shadow-lg group-hover:bg-brand-gold group-hover:text-blue-950 transition-colors z-10">
+                                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                    DOM.articlesFeed.insertAdjacentHTML('beforeend', feedHTML);
+
+                    // SIDEBAR WIDGETS (Only visible when Specific Category selected)
+                    const sidebarHTML = `
+                        <div onclick="openModal(${article.id})" class="cursor-pointer group flex gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700">
+                            <div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-gray-200 relative">
+                                <img src="${article.Image_URL}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=200&q=80'"/>
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <span class="text-[10px] font-bold text-brand-gold uppercase tracking-wider mb-1">${article.Category}</span>
+                                <h4 class="font-serif font-bold text-gray-900 dark-text text-sm leading-tight line-clamp-2 group-hover:text-brand-purple transition-colors">
+                                    ${article.Headline}
+                                </h4>
+                            </div>
+                        </div>
+                    `;
+                    DOM.sidebarWidgets.insertAdjacentHTML('beforeend', sidebarHTML);
+                });
+                lucide.createIcons();
+            }
+        }
+
+        // ==========================================
+        // UI & EVENT LISTENERS
+        // ==========================================
+        function setupEventListeners() {
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight;
+                const clientHeight = document.documentElement.clientHeight;
+                const progress = scrollHeight === clientHeight ? 0 : (scrollTop / (scrollHeight - clientHeight)) * 100;
+                DOM.progressBar.style.width = `${progress}%`;
+            });
+
+            DOM.editionBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleEditionMenu(!DOM.editionMenu.classList.contains('opacity-100'));
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!DOM.editionBtn.contains(e.target) && !DOM.editionMenu.contains(e.target)) {
+                    toggleEditionMenu(false);
+                }
+            });
+
+            // Search Toggle
+            DOM.searchBtn.addEventListener('click', () => {
+                state.isSearchActive = !state.isSearchActive;
+                if (state.isSearchActive) {
+                    DOM.searchContainer.classList.remove('hidden');
+                    setTimeout(() => DOM.searchContainer.classList.add('opacity-100'), 10);
+                    DOM.searchIcon.setAttribute('data-lucide', 'x');
+                    DOM.searchInput.focus();
+                } else {
+                    DOM.searchContainer.classList.remove('opacity-100');
+                    setTimeout(() => DOM.searchContainer.classList.add('hidden'), 300);
+                    DOM.searchIcon.setAttribute('data-lucide', 'search');
+                    state.searchQuery = "";
+                    DOM.searchInput.value = "";
+                    updateUI();
+                }
+                lucide.createIcons();
+            });
+
+            DOM.searchInput.addEventListener('input', (e) => {
+                state.searchQuery = e.target.value;
+                updateUI();
+            });
+
+            // Theme Toggle
+            DOM.themeToggle.addEventListener('click', () => {
+                state.isDarkMode = !state.isDarkMode;
+                localStorage.setItem('darkMode', state.isDarkMode);
+                applyTheme();
+            });
+
+            // Modal Closes
+            DOM.closeModalBtn.addEventListener('click', closeModal);
+            DOM.modalBgOverlay.addEventListener('click', closeModal);
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+        }
+
+        function applyTheme() {
+            if (state.isDarkMode) {
+                document.documentElement.classList.add('dark');
+                DOM.themeIcon.setAttribute('data-lucide', 'sun');
+            } else {
+                document.documentElement.classList.remove('dark');
+                DOM.themeIcon.setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        }
+
+        function toggleEditionMenu(forceState) {
+            if (forceState) {
+                DOM.editionMenu.classList.remove('hidden');
+                setTimeout(() => DOM.editionMenu.classList.add('opacity-100'), 10);
+                DOM.editionChevron.classList.add('rotate-180');
+            } else {
+                DOM.editionMenu.classList.remove('opacity-100');
+                DOM.editionChevron.classList.remove('rotate-180');
+                setTimeout(() => DOM.editionMenu.classList.add('hidden'), 200);
+            }
+        }
+
+        // ==========================================
+        // MODAL LOGIC
+        // ==========================================
+        function openModal(articleId) {
+            const article = state.articles.find(a => a.id === articleId);
+            if (!article) return;
+
+            // Populate Main View
+            DOM.modalImage.src = article.Image_URL;
+            DOM.modalCategory.textContent = article.Category;
+            DOM.modalDate.textContent = article.Date;
+            DOM.modalHeadline.textContent = article.Headline;
+            
+            // Handle Content
+            const contentText = article.Full_Content || article.Summary || "No content available.";
+            const paragraphs = contentText.split('. ').map((sentence, i, arr) => {
+                if (!sentence) return '';
+                const period = i !== arr.length - 1 && !sentence.endsWith('.') ? '.' : '';
+                return `<p>${sentence}${period}</p>`;
+            }).join('');
+            DOM.modalBody.innerHTML = paragraphs;
+
+            // Handle External Link
+            if (article.External_Link && article.External_Link.trim() !== "" && article.External_Link !== "#") {
+                DOM.modalExtLink.href = article.External_Link;
+                DOM.modalExtLinkContainer.classList.remove('hidden');
+            } else {
+                DOM.modalExtLinkContainer.classList.add('hidden');
+            }
+
+            // Populate Sidebar Inside Modal
+            DOM.modalSidebar.innerHTML = '';
+            const otherArticles = state.articles.filter(a => a.id !== articleId).slice(0, 8);
+            otherArticles.forEach(other => {
+                const sidebarHTML = `
+                    <div onclick="switchModalArticle(${other.id})" class="cursor-pointer group flex gap-3 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <div class="w-16 h-16 rounded-md overflow-hidden shrink-0 bg-gray-200">
+                            <img src="${other.Image_URL}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=200&q=80'"/>
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <h4 class="font-serif font-bold text-gray-900 dark-text text-xs leading-snug line-clamp-2 group-hover:text-brand-purple transition-colors">
+                                ${other.Headline}
+                            </h4>
+                        </div>
+                    </div>
+                `;
+                DOM.modalSidebar.insertAdjacentHTML('beforeend', sidebarHTML);
+            });
+
+            // Show Modal
+            DOM.modal.classList.add('modal-active');
+            setTimeout(() => DOM.modalContentContainer.classList.add('modal-content-active'), 10);
+            document.body.style.overflow = 'hidden';
+            
+            // Scroll to top of modal content
+            DOM.modalContentContainer.querySelector('.overflow-y-auto').scrollTo(0,0);
+        }
+
+        // Helper to switch articles while modal is open
+        window.switchModalArticle = function(id) {
+            openModal(id);
+        };
+
+        function closeModal() {
+            DOM.modalContentContainer.classList.remove('modal-content-active');
+            setTimeout(() => {
+                DOM.modal.classList.remove('modal-active');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
