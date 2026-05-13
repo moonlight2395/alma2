@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alma Communiqué</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -56,31 +53,16 @@
         /* Modal Transitions */
         .modal-active { opacity: 1 !important; pointer-events: auto !important; }
         .modal-content-active { transform: scale(1) translateY(0) !important; opacity: 1 !important; }
-        
-        /* Hexagon Clip Path for Header */
-        .hex-clip {
-            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-        }
-        
-        /* Dotted Pattern Background */
-        .dotted-bg {
-            background-image: radial-gradient(rgba(255, 255, 255, 0.15) 2px, transparent 2px);
-            background-size: 20px 20px;
-        }
     </style>
 </head>
 <body class="text-gray-900 relative bg-gray-50">
 
-    <!-- GOLDEN PROGRESS BAR -->
     <div class="fixed top-0 left-0 w-full h-1.5 bg-gray-200 z-[100] dark:bg-gray-800">
         <div id="progress-bar" class="h-full bg-brand-gold transition-all duration-150 ease-out" style="width: 0%"></div>
     </div>
 
-    <!-- CUSTOM HERO HEADER -->
-    <header class="relative bg-brand-purple dotted-bg overflow-hidden shadow-lg w-full">
-        <!-- Floating Navigation Bar -->
-        <div class="absolute top-0 w-full z-50 px-6 py-4 flex justify-between items-center bg-black/20 backdrop-blur-sm">
-            <!-- Left: Edition Dropdown -->
+    <header class="relative bg-brand-darkPurple shadow-lg w-full flex flex-col">
+        <div class="absolute top-0 w-full z-50 px-6 py-4 flex justify-between items-center bg-black/40 backdrop-blur-md border-b border-white/10">
             <div class="relative">
                 <button id="edition-btn" class="flex items-center gap-2 text-white hover:bg-white/10 px-4 py-2 rounded-xl transition-colors border border-white/20 backdrop-blur-md shadow-sm">
                     <i data-lucide="calendar" class="w-4 h-4 text-white/80"></i>
@@ -94,12 +76,10 @@
                         Select Edition
                     </div>
                     <div id="edition-options">
-                        <!-- Loaded dynamically -->
-                    </div>
+                        </div>
                 </div>
             </div>
 
-            <!-- Right: Dark Mode & Search -->
             <div class="flex items-center gap-3">
                 <div id="search-container" class="relative hidden opacity-0 transition-opacity duration-300">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
@@ -114,55 +94,31 @@
             </div>
         </div>
 
-        <!-- Header Content -->
-        <div class="max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-16 flex flex-col md:flex-row items-center gap-8 md:gap-12 relative z-10">
+        <div class="w-full relative pt-[72px] md:pt-[76px] bg-brand-darkPurple flex justify-center">
+            <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-10 pointer-events-none"></div>
             
-            <!-- Left Side: Title & Logos -->
-            <div class="flex-1 flex flex-col items-center md:items-start text-center md:text-left z-20">
-                <img src="https://i.ibb.co/JFrFhtD2/unnamed.png" alt="IIT BHU & SAIC Logos" class="h-16 md:h-20 mb-8 object-contain bg-white/90 p-2 rounded-lg shadow-md" />
-                
-                <div class="bg-brand-cream border-[4px] border-brand-red p-6 md:p-8 shadow-2xl relative w-full max-w-lg transform -rotate-1 hover:rotate-0 transition-transform duration-300">
-                    <h1 class="font-montserrat text-4xl md:text-6xl font-black text-brand-purple tracking-tighter leading-none mb-2">
-                        ALMA<br/>COMMUNIQUÉ
-                    </h1>
-                    <p class="font-montserrat text-brand-red font-bold text-lg md:text-xl tracking-wide">
-                        Alumni Newsletter (<span id="header-edition-text">Loading...</span>)
-                    </p>
-                </div>
-            </div>
-
-            <!-- Right Side: Hexagon Image Grid -->
-            <div class="flex-1 w-full flex justify-center md:justify-end relative h-64 md:h-96 z-10 hidden sm:flex">
-                <div class="absolute w-40 h-40 md:w-48 md:h-48 hex-clip bg-gray-200 right-0 top-0 transform translate-x-4 -translate-y-4 shadow-xl border-4 border-white">
-                    <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80" alt="Campus" class="w-full h-full object-cover"/>
-                </div>
-                <div class="absolute w-40 h-40 md:w-48 md:h-48 hex-clip bg-gray-200 right-32 top-20 md:right-40 md:top-24 shadow-xl border-4 border-white z-10">
-                    <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80" alt="Students" class="w-full h-full object-cover"/>
-                </div>
-                <div class="absolute w-40 h-40 md:w-48 md:h-48 hex-clip bg-gray-200 right-16 top-40 md:right-20 md:top-48 shadow-xl border-4 border-white">
-                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80" alt="Library" class="w-full h-full object-cover"/>
-                </div>
-            </div>
+            <img 
+                src="https://i.ibb.co/MkB533qd/header.png" 
+                alt="Alma Communiqué Custom Header" 
+                class="w-full h-auto object-cover relative z-0"
+                style="aspect-ratio: 1920 / 800;"
+                onerror="this.src='https://i.ibb.co/JFrFhtD2/unnamed.png'"
+            />
         </div>
 
-        <!-- CATEGORIES BUBBLE ROW -->
         <div class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm relative z-20">
             <div id="categories-container" class="max-w-7xl mx-auto px-6 py-4 flex justify-start md:justify-center gap-3 overflow-x-auto no-scrollbar">
-                <!-- Dynamic categories go here -->
-            </div>
+                </div>
         </div>
     </header>
 
-    <!-- LOADING STATE -->
     <div id="loading-state" class="flex flex-col items-center justify-center py-20">
         <div class="w-12 h-12 border-4 border-brand-purple border-t-brand-gold rounded-full animate-spin mb-4"></div>
         <p class="font-montserrat font-bold text-gray-500 dark:text-gray-400">Loading live data from Google Sheets...</p>
     </div>
 
-    <!-- MAIN FEED -->
     <main id="main-content" class="max-w-7xl mx-auto px-4 md:px-8 py-10 flex flex-col lg:flex-row gap-8 hidden">
         
-        <!-- Left Column: Main News Feed -->
         <div id="feed-column" class="w-full lg:w-2/3 flex flex-col gap-6 transition-all duration-300">
             <div id="empty-state" class="hidden text-center text-gray-400 py-16 bg-white dark:bg-[#1e1e1e] rounded-2xl border border-gray-100 dark:border-gray-800">
                 <i data-lucide="search" class="w-12 h-12 mx-auto mb-4 opacity-20"></i>
@@ -172,37 +128,30 @@
                 </div>
             </div>
             <div id="articles-feed" class="flex flex-col gap-6">
-                <!-- Articles rendered via JS -->
-            </div>
+                </div>
         </div>
 
-        <!-- Right Column: Sidebar Widgets -->
         <div id="sidebar-column" class="w-full lg:w-1/3 flex flex-col gap-6 transition-all duration-300">
             <div class="sticky top-24 bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
                 <h3 class="font-montserrat font-bold text-lg text-brand-purple dark:text-brand-gold mb-4 flex items-center gap-2">
-                    <i data-lucide="trending-up" class="w-5 h-5"></i> More in this Edition
+                    <i data-lucide="trending-up" class="w-5 h-5"></i> More News
                 </h3>
                 <div id="sidebar-widgets" class="flex flex-col gap-4 max-h-[70vh] overflow-y-auto no-scrollbar pr-2">
-                    <!-- Sidebar Items rendered via JS -->
-                </div>
+                    </div>
             </div>
         </div>
     </main>
 
-    <!-- SAIC FOOTER -->
     <footer class="bg-[#9E5192] text-white font-montserrat mt-12 border-t-4 border-brand-gold">
         <div class="max-w-7xl mx-auto px-6 py-10">
-            <!-- Top Banner -->
             <div class="bg-[#701462] rounded-xl p-6 text-center mb-10 shadow-inner border border-white/10">
                 <p class="text-[11px] md:text-xs leading-relaxed max-w-4xl mx-auto text-gray-200">
                     SAIC is grateful to the Director, Dean (Resource & Alumni), Alumni Associations, and the entire IIT (BHU) fraternity for their constant support and blessings. We look forward to your valuable feedback. To share information for future editions, reach us at <a href="mailto:alumnicell@iitbhu.ac.in" class="text-brand-gold hover:underline">alumnicell@iitbhu.ac.in</a>.
                 </p>
             </div>
 
-            <!-- Footer Columns -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
                 
-                <!-- Contact Info -->
                 <div class="flex flex-col gap-3">
                     <h4 class="text-sm md:text-base font-bold tracking-widest text-[#F4DEC4] uppercase">Contact</h4>
                     <div class="text-[11px] md:text-xs text-gray-300 space-y-1.5">
@@ -213,7 +162,6 @@
                     </div>
                 </div>
 
-                <!-- Connect With Us -->
                 <div class="flex flex-col items-center gap-4">
                     <h4 class="text-sm md:text-base font-bold tracking-widest text-[#F4DEC4] uppercase">Connect With Us</h4>
                     <div class="flex gap-3 justify-center">
@@ -225,7 +173,6 @@
                     </div>
                 </div>
 
-                <!-- Newsletter Team -->
                 <div class="flex flex-col md:items-end gap-3 text-center md:text-right">
                     <h4 class="text-sm md:text-base font-bold tracking-widest text-[#F4DEC4] uppercase">Newsletter Team, SAIC</h4>
                     <div class="text-[11px] md:text-xs text-gray-300 leading-relaxed max-w-xs mx-auto md:mx-0">
@@ -246,7 +193,6 @@
         </div>
     </footer>
 
-    <!-- DESKTOP FULL ARTICLE MODAL -->
     <div id="article-modal" class="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm transition-all duration-300 opacity-0 pointer-events-none">
         <div id="modal-bg-overlay" class="absolute inset-0 cursor-pointer"></div>
         
@@ -256,7 +202,6 @@
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
 
-            <!-- Main Article View (Left 2/3) -->
             <div class="w-full lg:w-2/3 h-full flex flex-col overflow-y-auto no-scrollbar relative border-r border-gray-200 dark:border-gray-800">
                 <div class="w-full h-64 md:h-80 relative bg-gray-200 shrink-0">
                     <img id="modal-image" src="" alt="Article Cover" class="w-full h-full object-cover" />
@@ -272,9 +217,7 @@
                 
                 <div class="p-6 md:p-10 flex-1 bg-white dark:bg-[#121212]">
                     <div id="modal-body" class="prose prose-lg dark:prose-invert prose-blue max-w-none text-gray-700 dark:text-gray-300 leading-relaxed space-y-6 font-serif">
-                        <!-- Content Injected -->
-                    </div>
-                    <!-- External Link Button container -->
+                        </div>
                     <div id="modal-external-link-container" class="mt-10 hidden">
                         <a id="modal-external-link" href="#" target="_blank" class="inline-flex items-center gap-2 bg-brand-gold hover:bg-yellow-500 text-brand-purple font-montserrat font-bold py-3 px-6 rounded-xl transition-transform hover:scale-105 shadow-md">
                             Read Full External Article <i data-lucide="external-link" class="w-4 h-4"></i>
@@ -283,25 +226,21 @@
                 </div>
             </div>
 
-            <!-- More News Sidebar (Right 1/3) -->
             <div class="w-full lg:w-1/3 h-full bg-gray-50 dark:bg-[#1a1a1a] flex flex-col">
                 <div class="p-6 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1e1e1e]">
-                    <h3 class="font-montserrat font-bold text-lg text-brand-purple dark:text-brand-gold">More in this Edition</h3>
+                    <h3 class="font-montserrat font-bold text-lg text-brand-purple dark:text-brand-gold">More News</h3>
                 </div>
                 <div id="modal-sidebar" class="flex-1 overflow-y-auto no-scrollbar p-4 flex flex-col gap-3">
-                    <!-- Dynamic Items -->
-                </div>
+                    </div>
             </div>
 
         </div>
     </div>
 
-    <!-- Application Logic -->
     <script>
         // ==========================================
         // DATA CONFIGURATION
         // ==========================================
-        // Used pub?output=csv URL to bypass CORS and get raw data from the published sheet
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLlwZL6OhqHOG04uln2mtfA4C8RmS3fADrmCYd4qXRy8qBopqJ5RpkokcrDhyCF26TQIPzKNXhDNU6/pub?output=csv";
 
         let state = {
@@ -320,7 +259,6 @@
             editionMenu: document.getElementById('edition-menu'),
             editionOptions: document.getElementById('edition-options'),
             editionLabel: document.getElementById('active-edition-label'),
-            headerEditionText: document.getElementById('header-edition-text'),
             editionChevron: document.getElementById('edition-chevron'),
             searchBtn: document.getElementById('search-btn'),
             searchContainer: document.getElementById('search-container'),
@@ -363,9 +301,7 @@
             setupEventListeners();
             renderEditionMenu();
             
-            // Update labels
             DOM.editionLabel.textContent = state.activeEdition;
-            DOM.headerEditionText.textContent = state.activeEdition;
 
             await fetchGoogleSheetData();
         }
@@ -384,7 +320,6 @@
                 const values = lines[i].split(splitRegex).map(v => v.replace(/^"|"$/g, '').trim());
                 let obj = { id: i };
                 headers.forEach((header, index) => {
-                    // Map generic spreadsheet columns to our specific keys
                     if (header.includes('title') || header.includes('headline')) obj.Headline = values[index];
                     else if (header.includes('short info') || header.includes('summary')) obj.Summary = values[index];
                     else if (header.includes('entire content') || header.includes('full content')) obj.Full_Content = values[index];
@@ -395,7 +330,6 @@
                     else obj[header] = values[index];
                 });
                 
-                // Fallbacks if columns were missing
                 if (!obj.Category) obj.Category = "General";
                 if (!obj.Date) obj.Date = "Recent";
                 if (!obj.Image_URL) obj.Image_URL = "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1000&q=80";
@@ -418,7 +352,6 @@
                 
                 state.articles = parsedData;
 
-                // Extract unique categories dynamically
                 const uniqueCategories = [...new Set(parsedData.map(a => a.Category))];
                 state.categories = uniqueCategories;
 
@@ -426,7 +359,6 @@
             } catch (error) {
                 console.error("Error fetching data, using fallback:", error);
                 
-                // Detailed error message guiding the user
                 DOM.emptyStateTitle.textContent = "Failed to load data from Google Sheets.";
                 DOM.emptyStateTitle.classList.replace('text-gray-500', 'text-red-500');
                 DOM.emptyStateTitle.classList.replace('dark:text-gray-400', 'dark:text-red-400');
@@ -437,7 +369,6 @@
                         <li>Open your Google Sheet.</li>
                         <li>Click <b>File &gt; Share &gt; Publish to web</b>.</li>
                         <li>Select "Entire Document" and "Comma-separated values (.csv)", then click Publish.</li>
-                        <li>If you are opening this HTML file directly from your computer (file://), try using a different browser or running a local server.</li>
                     </ol>
                 `;
                 
@@ -464,10 +395,8 @@
                 btn.className = `w-full text-left px-4 py-3 text-sm transition-colors dark:text-gray-200 ${isActive ? 'bg-brand-cream dark:bg-gray-700 text-brand-purple font-bold' : 'hover:bg-gray-50 dark:hover:bg-gray-700'}`;
                 btn.textContent = edition;
                 btn.onclick = () => {
-                    // For demo: We just reload the same sheet but pretend it's a new edition
                     state.activeEdition = edition;
                     DOM.editionLabel.textContent = edition;
-                    DOM.headerEditionText.textContent = edition;
                     toggleEditionMenu(false);
                     renderEditionMenu(); 
                     fetchGoogleSheetData(); 
@@ -540,7 +469,6 @@
             DOM.sidebarWidgets.innerHTML = '';
             const filtered = getFilteredArticles();
             
-            // Adjust layouts based on 'All' vs 'Specific Category' selection
             if (state.selectedCategories.includes("All")) {
                 DOM.sidebarColumn.classList.add('hidden');
                 DOM.feedColumn.classList.remove('lg:w-2/3');
@@ -552,7 +480,6 @@
             }
 
             if (filtered.length === 0) {
-                // If it's already an error message from catch, don't overwrite it
                 if (!DOM.emptyStateTitle.textContent.includes("Failed")) {
                     DOM.emptyStateTitle.textContent = "No articles found";
                     DOM.emptyStateTitle.classList.replace('text-red-500', 'text-gray-500');
@@ -563,12 +490,9 @@
             } else {
                 DOM.emptyState.classList.add('hidden');
 
-                // Render main feed items
                 filtered.forEach((article, index) => {
-                    // MAIN FEED CARDS (Matching the Screenshot Design)
                     const feedHTML = `
                         <article onclick="openModal(${article.id})" class="cursor-pointer group dark-card bg-white rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row overflow-hidden min-h-[220px]">
-                            <!-- Text Left -->
                             <div class="p-6 md:p-8 flex-1 flex flex-col order-2 md:order-1 justify-center">
                                 <span class="text-[11px] md:text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest flex items-center gap-1.5 mb-3">
                                     <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${article.Date}
@@ -580,16 +504,13 @@
                                     ${article.Summary}
                                 </p>
                             </div>
-                            <!-- Image Right -->
                             <div class="w-full md:w-2/5 h-56 md:h-auto bg-gray-200 relative order-1 md:order-2 overflow-hidden shrink-0">
                                 <img src="${article.Image_URL}" alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80'"/>
                                 
-                                <!-- Category Badge Top Right -->
                                 <div class="absolute top-4 right-4 bg-brand-gold text-brand-darkPurple text-[10px] font-extrabold px-3 py-1.5 rounded-sm uppercase tracking-widest shadow-sm z-10">
                                     ${article.Category}
                                 </div>
                                 
-                                <!-- Circular Arrow Button Bottom Right -->
                                 <div class="absolute bottom-4 right-4 w-10 h-10 bg-blue-950 text-white rounded-full flex items-center justify-center shadow-lg group-hover:bg-brand-gold group-hover:text-blue-950 transition-colors z-10">
                                     <i data-lucide="arrow-right" class="w-5 h-5"></i>
                                 </div>
@@ -599,13 +520,11 @@
                     DOM.articlesFeed.insertAdjacentHTML('beforeend', feedHTML);
                 });
 
-                // Render Sidebar Items - ONLY articles from other categories
                 if (!state.selectedCategories.includes("All")) {
                     const otherArticles = state.articles.filter(a => !state.selectedCategories.includes(a.Category));
                     
                     if (otherArticles.length > 0) {
                         otherArticles.forEach(article => {
-                            // SIDEBAR WIDGETS
                             const sidebarHTML = `
                                 <div onclick="openModal(${article.id})" class="cursor-pointer group flex gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700">
                                     <div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-gray-200 relative">
@@ -653,7 +572,6 @@
                 }
             });
 
-            // Search Toggle
             DOM.searchBtn.addEventListener('click', () => {
                 state.isSearchActive = !state.isSearchActive;
                 if (state.isSearchActive) {
@@ -677,14 +595,12 @@
                 updateUI();
             });
 
-            // Theme Toggle
             DOM.themeToggle.addEventListener('click', () => {
                 state.isDarkMode = !state.isDarkMode;
                 localStorage.setItem('darkMode', state.isDarkMode);
                 applyTheme();
             });
 
-            // Modal Closes
             DOM.closeModalBtn.addEventListener('click', closeModal);
             DOM.modalBgOverlay.addEventListener('click', closeModal);
             document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
@@ -720,13 +636,11 @@
             const article = state.articles.find(a => a.id === articleId);
             if (!article) return;
 
-            // Populate Main View
             DOM.modalImage.src = article.Image_URL;
             DOM.modalCategory.textContent = article.Category;
             DOM.modalDate.textContent = article.Date;
             DOM.modalHeadline.textContent = article.Headline;
             
-            // Handle Content
             const contentText = article.Full_Content || article.Summary || "No content available.";
             const paragraphs = contentText.split('. ').map((sentence, i, arr) => {
                 if (!sentence) return '';
@@ -735,7 +649,6 @@
             }).join('');
             DOM.modalBody.innerHTML = paragraphs;
 
-            // Handle External Link
             if (article.External_Link && article.External_Link.trim() !== "" && article.External_Link !== "#") {
                 DOM.modalExtLink.href = article.External_Link;
                 DOM.modalExtLinkContainer.classList.remove('hidden');
@@ -743,7 +656,6 @@
                 DOM.modalExtLinkContainer.classList.add('hidden');
             }
 
-            // Populate Sidebar Inside Modal
             DOM.modalSidebar.innerHTML = '';
             const otherArticles = state.articles.filter(a => a.id !== articleId).slice(0, 8);
             otherArticles.forEach(other => {
@@ -762,16 +674,13 @@
                 DOM.modalSidebar.insertAdjacentHTML('beforeend', sidebarHTML);
             });
 
-            // Show Modal
             DOM.modal.classList.add('modal-active');
             setTimeout(() => DOM.modalContentContainer.classList.add('modal-content-active'), 10);
             document.body.style.overflow = 'hidden';
             
-            // Scroll to top of modal content
             DOM.modalContentContainer.querySelector('.overflow-y-auto').scrollTo(0,0);
         }
 
-        // Helper to switch articles while modal is open
         window.switchModalArticle = function(id) {
             openModal(id);
         };
