@@ -61,10 +61,13 @@
         <div id="progress-bar" class="h-full bg-brand-gold transition-all duration-150 ease-out" style="width: 0%"></div>
     </div>
 
-    <header class="relative bg-brand-darkPurple shadow-lg w-full flex flex-col">
-        <div class="absolute top-0 w-full z-50 px-6 py-4 flex justify-between items-center bg-black/40 backdrop-blur-md border-b border-white/10">
+    <!-- RESTRUCTURED HEADER -->
+    <header class="w-full flex flex-col z-40 bg-white dark:bg-gray-900 shadow-sm relative">
+        
+        <!-- 1. Solid Navigation Bar (This will now firmly sit above the image) -->
+        <div class="w-full px-6 py-4 flex justify-between items-center bg-brand-darkPurple border-b border-black/20">
             <div class="relative">
-                <button id="edition-btn" class="flex items-center gap-2 text-white hover:bg-white/10 px-4 py-2 rounded-xl transition-colors border border-white/20 backdrop-blur-md shadow-sm">
+                <button id="edition-btn" class="flex items-center gap-2 text-white hover:bg-white/10 px-4 py-2 rounded-xl transition-colors border border-white/20 shadow-sm">
                     <i data-lucide="calendar" class="w-4 h-4 text-white/80"></i>
                     <span class="font-montserrat font-bold text-sm flex items-center gap-1">
                         <span id="active-edition-label">Latest Edition</span> 
@@ -76,39 +79,40 @@
                         Select Edition
                     </div>
                     <div id="edition-options">
-                        </div>
+                        <!-- Loaded dynamically -->
+                    </div>
                 </div>
             </div>
 
             <div class="flex items-center gap-3">
                 <div id="search-container" class="relative hidden opacity-0 transition-opacity duration-300">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                    <input type="text" id="search-input" placeholder="Search news..." class="w-48 md:w-64 bg-white/90 text-gray-900 text-sm rounded-full py-2.5 pl-9 pr-4 outline-none focus:ring-2 focus:ring-brand-gold transition-all shadow-lg" />
+                    <input type="text" id="search-input" placeholder="Search news..." class="w-48 md:w-64 bg-white text-gray-900 text-sm rounded-full py-2.5 pl-9 pr-4 outline-none focus:ring-2 focus:ring-brand-gold transition-all shadow-lg" />
                 </div>
-                <button id="search-btn" class="p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-sm" aria-label="Toggle Search">
+                <button id="search-btn" class="p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 border border-white/20 shadow-sm" aria-label="Toggle Search">
                     <i data-lucide="search" id="search-icon" class="w-5 h-5"></i>
                 </button>
-                <button id="theme-toggle" class="p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-sm" aria-label="Toggle Dark Mode">
+                <button id="theme-toggle" class="p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 border border-white/20 shadow-sm" aria-label="Toggle Dark Mode">
                     <i data-lucide="moon" id="theme-icon" class="w-5 h-5"></i>
                 </button>
             </div>
         </div>
 
-        <div class="w-full relative pt-[72px] md:pt-[76px] bg-brand-darkPurple flex justify-center">
-            <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent z-10 pointer-events-none"></div>
-            
+        <!-- 2. Clean Image Banner (Bulletproof anti-cropping logic applied via inline CSS) -->
+        <div class="w-full bg-brand-darkPurple flex justify-center items-center">
             <img 
-                src="https://i.ibb.co/MkB533qd/header.png" 
-                alt="Alma Communiqué Custom Header" 
-                class="w-full h-auto object-cover relative z-0"
-                style="aspect-ratio: 1920 / 800;"
+                src="https://ik.imagekit.io/fcua6x8jl/fin2.png?updatedAt=1778678921778" 
+                alt="Alma Communiqué Header Banner" 
+                style="width: 100%; height: auto; max-height: 800px; object-fit: contain; display: block;"
                 onerror="this.src='https://i.ibb.co/JFrFhtD2/unnamed.png'"
             />
         </div>
 
-        <div class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm relative z-20">
+        <!-- 3. Categories Bubble Row -->
+        <div class="w-full bg-white dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-gray-800 shadow-sm relative z-20">
             <div id="categories-container" class="max-w-7xl mx-auto px-6 py-4 flex justify-start md:justify-center gap-3 overflow-x-auto no-scrollbar">
-                </div>
+                <!-- Dynamic categories go here -->
+            </div>
         </div>
     </header>
 
@@ -128,7 +132,8 @@
                 </div>
             </div>
             <div id="articles-feed" class="flex flex-col gap-6">
-                </div>
+                <!-- Articles rendered via JS -->
+            </div>
         </div>
 
         <div id="sidebar-column" class="w-full lg:w-1/3 flex flex-col gap-6 transition-all duration-300">
@@ -137,7 +142,8 @@
                     <i data-lucide="trending-up" class="w-5 h-5"></i> More News
                 </h3>
                 <div id="sidebar-widgets" class="flex flex-col gap-4 max-h-[70vh] overflow-y-auto no-scrollbar pr-2">
-                    </div>
+                    <!-- Sidebar Items rendered via JS -->
+                </div>
             </div>
         </div>
     </main>
@@ -490,6 +496,7 @@
             } else {
                 DOM.emptyState.classList.add('hidden');
 
+                // Render main feed items
                 filtered.forEach((article, index) => {
                     const feedHTML = `
                         <article onclick="openModal(${article.id})" class="cursor-pointer group dark-card bg-white rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row overflow-hidden min-h-[220px]">
