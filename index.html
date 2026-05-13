@@ -262,11 +262,17 @@
         // ==========================================
         // DATA CONFIGURATION
         // ==========================================
-        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLlwZL6OhqHOG04uln2mtfA4C8RmS3fADrmCYd4qXRy8qBopqJ5RpkokcrDhyCF26TQIPzKNXhDNU6/pub?output=csv";
+        
+        // DYNAMIC ARTICLE ENGINE:
+        // Paste your published CSV links for the main news feed for each edition
+        const EDITION_SOURCES = {
+            "March 2026": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLlwZL6OhqHOG04uln2mtfA4C8RmS3fADrmCYd4qXRy8qBopqJ5RpkokcrDhyCF26TQIPzKNXhDNU6/pub?output=csv",
+            "February 2026": "", // Paste your February CSV link here when ready
+            "Centenary Special": "" // Paste your Centenary CSV link here when ready
+        };
 
         // DYNAMIC TABLES ENGINE: 
-        // Just paste your published CSV links here for each edition!
-        // To help you preview, I have pre-filled March 2026 with the actual data from your PDF using inline data.
+        // Paste your published CSV links here for tables associated with each edition
         const EDITION_TABLES = {
             "March 2026": [
                 {
@@ -401,8 +407,14 @@
                 DOM.loadingState.classList.remove('hidden');
                 DOM.mainContent.classList.add('hidden');
 
+                // Get the main article URL for the currently selected edition
+                const currentUrl = EDITION_SOURCES[state.activeEdition];
+                if (!currentUrl) {
+                    throw new Error("No Google Sheet link provided for this edition.");
+                }
+
                 // Fetch Main Articles
-                const response = await fetch(GOOGLE_SHEET_CSV_URL);
+                const response = await fetch(currentUrl);
                 if (!response.ok) throw new Error("Network response was not ok");
                 const csvText = await response.text();
                 state.articles = parseCSV(csvText);
@@ -422,6 +434,7 @@
                 DOM.emptyStateMessage.innerHTML = `
                     <p class="font-bold mb-2 text-gray-700 dark:text-gray-300">To fix this issue:</p>
                     <ol class="list-decimal text-left text-xs md:text-sm space-y-2 max-w-sm mx-auto text-gray-600 dark:text-gray-400">
+                        <li>Make sure you have added a link for <b>${state.activeEdition}</b> in the EDITION_SOURCES object.</li>
                         <li>Open your Google Sheet.</li>
                         <li>Click <b>File &gt; Share &gt; Publish to web</b>.</li>
                         <li>Select "Entire Document" and "Comma-separated values (.csv)", then click Publish.</li>
