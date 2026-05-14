@@ -287,6 +287,10 @@
                 {
                     title: "Patents Granted in March",
                     url: 'data:text/csv;charset=utf-8,"Title","Faculty","Patent Number"\n"A System and Method for Electrochemical Detection and Quantification of Cell Characteristics and Functions","Dr. Marshal, Juhi Jaiswal","582290"\n"A Heterocyclic Derivative and a Method of Synthesis Thereof","Sushil Kumar Singh, Ashok Kumar, Nilesh Gajanan Bajad","582450"\n"An IoT-Enabled System and Method for Aquatic Life Management","Dr. Prasenjit Chanak, Mr. Nuthan Chingcetham, Prof. Pramod Kumar Jain","582592"\n"A Polymeric Nanocapsule and a Method of Synthesis Thereof","Dr. Pradip Paik, Sukanya Patra","583005"'
+                },
+                {
+                    title: "Projects sanctioned in March",
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQx7XhmXTqJaXCbAOG5lQGeHxiXyEyWjDJMQkSKHPgZ3f-EGkxYzmSkBOzQedq5OGYV9o9lgzJV4_21/pubhtml'
                 }
             ],
             "February 2026": []
@@ -455,7 +459,13 @@
             for (const table of tablesConfig) {
                 if (!table.url) continue;
                 try {
-                    const res = await fetch(table.url);
+                    // SMART LINK CONVERTER: Auto-fixes pubhtml links so the CSV parser doesn't break
+                    let fetchUrl = table.url;
+                    if (fetchUrl.includes('/pubhtml')) {
+                        fetchUrl = fetchUrl.replace('/pubhtml', '/pub?output=csv');
+                    }
+
+                    const res = await fetch(fetchUrl);
                     if (res.ok) {
                         const csv = await res.text();
                         const parsed = parseTableCSV(csv);
@@ -800,51 +810,31 @@
                                 ${other.Headline}
                             </h4>
                         </div>
-        // DYNAMIC TABLES ENGINE: 
-        const EDITION_TABLES = {
-            "March 2026": [
-                {
-                    title: "Patents Filed in March",
-                    url: 'data:text/csv;charset=utf-8,"Title","Faculty","Filing Date"\n"A Process for Producing High Phase Purity Alpha-Silicon Nitride Powder","Dr. Kundan Kumar, Aryan Yadav, Dr. Mithun Palit","09/03/2026"\n"System and Method for AI-Based BPPV Maneuver Guidance Using Head-Pose Detection","Dr. Ajay Pratap, Dr. Deepika Joshi, Neetu Rani Dhiman, Nikita Sharma, Himanshu Singh","11/03/2026"\n"A Rechargeable Zinc Air Battery","Dr. Ashish Kumar Mishra, V. Ganesan, Varsha Singh, Mr. Rohit Kumar Gupta","13/03/2026"\n"Method of Preparation of a Perlin Aldehydes","Dr. Deepak Kumar, Ms. Pallavi Saha, Ms. Sunaina Kamboj","23/03/2026"'
-                },
-                {
-                    title: "Patents Granted in March",
-                    url: 'data:text/csv;charset=utf-8,"Title","Faculty","Patent Number"\n"A System and Method for Electrochemical Detection and Quantification of Cell Characteristics and Functions","Dr. Marshal, Juhi Jaiswal","582290"\n"A Heterocyclic Derivative and a Method of Synthesis Thereof","Sushil Kumar Singh, Ashok Kumar, Nilesh Gajanan Bajad","582450"\n"An IoT-Enabled System and Method for Aquatic Life Management","Dr. Prasenjit Chanak, Mr. Nuthan Chingcetham, Prof. Pramod Kumar Jain","582592"\n"A Polymeric Nanocapsule and a Method of Synthesis Thereof","Dr. Pradip Paik, Sukanya Patra","583005"'
-                },
-                {
-                    title: "Projects sanctioned in March",
-                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQx7XhmXTqJaXCbAOG5lQGeHxiXyEyWjDJMQkSKHPgZ3f-EGkxYzmSkBOzQedq5OGYV9o9lgzJV4_21/pubhtml'
-                }
-            ],
-            "February 2026": []
-        };
-        async function fetchTablesForEdition(edition) {
-            state.tablesData = [];
-            const tablesConfig = EDITION_TABLES[edition];
+                    </div>
+                `;
+                DOM.modalSidebar.insertAdjacentHTML('beforeend', sidebarHTML);
+            });
+
+            DOM.modal.classList.add('modal-active');
+            setTimeout(() => DOM.modalContentContainer.classList.add('modal-content-active'), 10);
+            document.body.style.overflow = 'hidden';
             
-            if (!tablesConfig || tablesConfig.length === 0) return;
+            // Ensures both container and main view scroll to top correctly across mobile and desktop
+            DOM.modalContentContainer.scrollTo(0,0);
+            const mainViewScroll = DOM.modalContentContainer.querySelector('.lg\\:overflow-y-auto');
+            if(mainViewScroll) mainViewScroll.scrollTo(0,0);
+        }
 
-            for (const table of tablesConfig) {
-                if (!table.url) continue;
-                try {
-                    // SMART LINK CONVERTER: Auto-fixes pubhtml links so the CSV parser doesn't break
-                    let fetchUrl = table.url;
-                    if (fetchUrl.includes('/pubhtml')) {
-                        fetchUrl = fetchUrl.replace('/pubhtml', '/pub?output=csv');
-                    }
+        window.switchModalArticle = function(id) {
+            openModal(id);
+        };
 
-                    const res = await fetch(fetchUrl);
-                    if (res.ok) {
-                        const csv = await res.text();
-                        const parsed = parseTableCSV(csv);
-                        if(parsed.headers.length > 0) {
-                            state.tablesData.push({ title: table.title, headers: parsed.headers, rows: parsed.rows });
-                        }
-                    }
-                } catch(e) {
-                    console.log(`Failed to fetch table: ${table.title}`, e);
-                }
-            }
+        function closeModal() {
+            DOM.modalContentContainer.classList.remove('modal-content-active');
+            setTimeout(() => {
+                DOM.modal.classList.remove('modal-active');
+                document.body.style.overflow = '';
+            }, 300);
         }
 
         document.addEventListener('DOMContentLoaded', init);
