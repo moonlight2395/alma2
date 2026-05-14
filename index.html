@@ -340,8 +340,8 @@
             "March 2026": [
                 {
                     title: "Patents Granted in March",
-                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNEw6ur0k-CcB24icI2ZDSUcteMyZhj3fTGXNSBgF0wPYeIB4jV1zyEjztMgw8g99aa6Q10JUbnsp/pub?output=csv
-                        },
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNEw6ur0k-CcB24icI2ZDSUcteMyZhj3fTGXNSBgF0wPYeIB4jV1zyEjztMgw8g99aa6Q10JUbnsp/pub?output=csv'
+                },
                 {
                     title: "Patents Filed in March",
                     url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSOrGepmKtFfdknWh1L1lHC2CLIdj9aKerWuyy8Q9zFoKmt02ETwBtF-bvTDXKNexT3-Mmkj8v6o7Uh/pub?output=csv'
@@ -351,10 +351,11 @@
                     url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQx7XhmXTqJaXCbAOG5lQGeHxiXyEyWjDJMQkSKHPgZ3f-EGkxYzmSkBOzQedq5OGYV9o9lgzJV4_21/pubhtml'
                 }
             ],
-            "February 2026": [ {
+            "February 2026": [ 
+                {
                     title: "Patents Granted in February",
-                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNEw6ur0k-CcB24icI2ZDSUcteMyZhj3fTGXNSBgF0wPYeIB4jV1zyEjztMgw8g99aa6Q10JUbnsp/pub?output=csv
-                        },
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNEw6ur0k-CcB24icI2ZDSUcteMyZhj3fTGXNSBgF0wPYeIB4jV1zyEjztMgw8g99aa6Q10JUbnsp/pub?output=csv'
+                },
                 {
                     title: "Patents Filed in February",
                     url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSOrGepmKtFfdknWh1L1lHC2CLIdj9aKerWuyy8Q9zFoKmt02ETwBtF-bvTDXKNexT3-Mmkj8v6o7Uh/pub?output=csv'
@@ -362,11 +363,13 @@
                 {
                     title: "Projects sanctioned in February",
                     url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQx7XhmXTqJaXCbAOG5lQGeHxiXyEyWjDJMQkSKHPgZ3f-EGkxYzmSkBOzQedq5OGYV9o9lgzJV4_21/pubhtml'
-                },                          ],
-            "January 2026": [ {
+                }
+            ],
+            "January 2026": [ 
+                {
                     title: "Patents Granted in January",
-                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNEw6ur0k-CcB24icI2ZDSUcteMyZhj3fTGXNSBgF0wPYeIB4jV1zyEjztMgw8g99aa6Q10JUbnsp/pub?output=csv
-                        },
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNEw6ur0k-CcB24icI2ZDSUcteMyZhj3fTGXNSBgF0wPYeIB4jV1zyEjztMgw8g99aa6Q10JUbnsp/pub?output=csv'
+                },
                 {
                     title: "Patents Filed in January",
                     url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSOrGepmKtFfdknWh1L1lHC2CLIdj9aKerWuyy8Q9zFoKmt02ETwBtF-bvTDXKNexT3-Mmkj8v6o7Uh/pub?output=csv'
@@ -374,7 +377,8 @@
                 {
                     title: "Projects sanctioned in January",
                     url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQx7XhmXTqJaXCbAOG5lQGeHxiXyEyWjDJMQkSKHPgZ3f-EGkxYzmSkBOzQedq5OGYV9o9lgzJV4_21/pubhtml'
-                },                          ]
+                }
+            ]
         };
 
         let state = {
@@ -384,6 +388,8 @@
             tablesData: [],
             categories: [],
             selectedCategories: ["All"],
+            searchQuery: "",
+            isSearchActive: false,
             isDarkMode: localStorage.getItem('darkMode') === 'true'
         };
 
