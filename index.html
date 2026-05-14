@@ -72,11 +72,20 @@
         <div id="progress-bar" class="h-full bg-brand-gold transition-all duration-150 ease-out" style="width: 0%"></div>
     </div>
 
-    <!-- FLOATING CREATIVE BUBBLE -->
-    <button id="creative-btn" class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100] bg-gradient-to-tr from-brand-purple via-[#9E5192] to-[#bc1888] text-brand-gold px-5 py-3 md:px-6 md:py-4 rounded-full shadow-2xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 group border border-white/20 animate-float cursor-pointer">
-        <i data-lucide="sparkles" class="w-5 h-5 text-brand-gold group-hover:animate-pulse"></i>
-        <span class="font-montserrat font-bold text-sm tracking-wider drop-shadow-md">Creative</span>
-    </button>
+    <!-- FLOATING BUTTONS CONTAINER (Moves up when footer is visible) -->
+    <div id="floating-buttons-container" class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100] flex flex-col items-end gap-3 transition-transform duration-75">
+        
+        <!-- GO TO TOP BUTTON -->
+        <button id="go-top-btn" class="bg-white dark:bg-gray-800 text-brand-purple dark:text-brand-gold p-3 rounded-full shadow-lg hover:scale-110 transition-all duration-300 border border-gray-200 dark:border-gray-700 opacity-0 translate-y-4 pointer-events-none flex items-center justify-center">
+            <i data-lucide="arrow-up" class="w-5 h-5"></i>
+        </button>
+
+        <!-- FLOATING CREATIVE BUBBLE -->
+        <button id="creative-btn" class="bg-gradient-to-tr from-brand-purple via-[#9E5192] to-[#bc1888] text-brand-gold px-5 py-3 md:px-6 md:py-4 rounded-full shadow-2xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 group border border-white/20 animate-float cursor-pointer">
+            <i data-lucide="sparkles" class="w-5 h-5 text-brand-gold group-hover:animate-pulse"></i>
+            <span class="font-montserrat font-bold text-sm tracking-wider drop-shadow-md">Creative</span>
+        </button>
+    </div>
 
     <!-- RESTRUCTURED HEADER -->
     <header class="w-full flex flex-col z-40 bg-white dark:bg-gray-900 shadow-sm relative">
@@ -171,7 +180,7 @@
         </div>
     </main>
 
-    <footer class="bg-[#9E5192] text-white font-montserrat mt-12 border-t-4 border-brand-gold">
+    <footer id="main-footer" class="bg-[#9E5192] text-white font-montserrat mt-12 border-t-4 border-brand-gold">
         <div class="max-w-7xl mx-auto px-6 py-10">
             <div class="bg-[#701462] rounded-xl py-4 px-5 text-center mb-10 shadow-inner border border-white/10 max-w-3xl mx-auto">
                 <p class="text-[11px] md:text-xs leading-relaxed text-gray-200">
@@ -288,7 +297,6 @@
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             
-            <!-- Replace the src below with your actual creative section image link -->
             <img 
                 src="https://ik.imagekit.io/fcua6x8jl/Creative_page-0001.jpg" 
                 alt="Creative Section" 
@@ -378,7 +386,9 @@
             modalExtLinkContainer: document.getElementById('modal-external-link-container'),
             modalExtLink: document.getElementById('modal-external-link'),
 
-            // New Creative Modal DOM elements
+            // Floating Buttons
+            floatContainer: document.getElementById('floating-buttons-container'),
+            goTopBtn: document.getElementById('go-top-btn'),
             creativeBtn: document.getElementById('creative-btn'),
             creativeModal: document.getElementById('creative-modal'),
             creativeModalContent: document.getElementById('creative-modal-content'),
@@ -498,7 +508,6 @@
             for (const table of tablesConfig) {
                 if (!table.url) continue;
                 try {
-                    // SMART LINK CONVERTER: Auto-fixes pubhtml links so the CSV parser doesn't break
                     let fetchUrl = table.url;
                     if (fetchUrl.includes('/pubhtml')) {
                         fetchUrl = fetchUrl.replace('/pubhtml', '/pub?output=csv');
@@ -590,17 +599,29 @@
 
         function getFilteredArticles() {
             let result = state.articles;
+            
+            // Filter by categories
             if (!state.selectedCategories.includes("All")) {
                 result = result.filter(a => state.selectedCategories.includes(a.Category));
             }
+            
+            // Highly inclusive multi-word fuzzy search
             if (state.searchQuery.trim() !== "") {
-                const q = state.searchQuery.toLowerCase();
-                result = result.filter(a => 
-                    (a.Headline && a.Headline.toLowerCase().includes(q)) || 
-                    (a.Summary && a.Summary.toLowerCase().includes(q)) ||
-                    (a.Full_Content && a.Full_Content.toLowerCase().includes(q))
-                );
+                const query = state.searchQuery.toLowerCase();
+                const searchTerms = query.split(' ').filter(term => term.length > 0);
+                
+                result = result.filter(article => {
+                    // Combine all text data in this article into one giant searchable string
+                    const searchableText = Object.values(article)
+                        .filter(val => typeof val === 'string' || typeof val === 'number')
+                        .join(' ')
+                        .toLowerCase();
+                    
+                    // The article must contain EVERY word the user typed in the search bar
+                    return searchTerms.every(term => searchableText.includes(term));
+                });
             }
+            
             return result;
         }
 
@@ -614,7 +635,6 @@
                 DOM.tablesContainer.classList.remove('hidden');
                 
                 state.tablesData.forEach(table => {
-                    // Added max-w-full and ios-scroll to force Apple devices to respect the boundaries
                     const tableHTML = `
                         <div class="bg-white dark:bg-[#1e1e1e] rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.05)] border border-gray-100 dark:border-gray-800 p-4 md:p-8 overflow-hidden w-full max-w-full">
                             <h3 class="font-serif font-bold text-lg md:text-2xl text-gray-900 dark:text-brand-gold mb-4 md:mb-6">${table.title}</h3>
@@ -739,6 +759,32 @@
                 const clientHeight = document.documentElement.clientHeight;
                 const progress = scrollHeight === clientHeight ? 0 : (scrollTop / (scrollHeight - clientHeight)) * 100;
                 DOM.progressBar.style.width = `${progress}%`;
+
+                // Handle 'Go To Top' Button Visibility
+                if (scrollTop > 400) {
+                    DOM.goTopBtn.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                    DOM.goTopBtn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                } else {
+                    DOM.goTopBtn.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                    DOM.goTopBtn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                }
+
+                // Handle Smart Footer Collision (Push buttons up when footer appears)
+                const footer = document.getElementById('main-footer');
+                if (footer && DOM.floatContainer) {
+                    const footerRect = footer.getBoundingClientRect();
+                    const viewportHeight = window.innerHeight;
+                    
+                    // Calculate how many pixels of the footer are visible on the screen
+                    const footerVisibleHeight = Math.max(0, viewportHeight - footerRect.top);
+                    
+                    // Shift the floating container up exactly by the amount the footer is visible
+                    DOM.floatContainer.style.transform = `translateY(-${footerVisibleHeight}px)`;
+                }
+            });
+
+            DOM.goTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
             DOM.editionBtn.addEventListener('click', (e) => {
