@@ -111,14 +111,6 @@
             </div>
 
             <div class="flex items-center gap-2 md:gap-3">
-                <div id="search-container" class="relative hidden opacity-0 transition-opacity duration-300">
-                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                    <!-- Font is strictly 16px on mobile to prevent iOS zooming, and w-40 to prevent horizontal scroll white lines -->
-                    <input type="text" id="search-input" placeholder="Search news..." class="w-40 md:w-64 bg-white text-gray-900 text-[16px] md:text-sm rounded-full py-2 pl-9 pr-4 outline-none focus:ring-2 focus:ring-brand-gold transition-all shadow-lg" />
-                </div>
-                <button id="search-btn" class="p-2 md:p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 border border-white/20 shadow-sm" aria-label="Toggle Search">
-                    <i data-lucide="search" id="search-icon" class="w-4 h-4 md:w-5 md:h-5"></i>
-                </button>
                 <button id="theme-toggle" class="p-2 md:p-2.5 rounded-full transition-colors bg-white/10 text-white hover:bg-white/20 border border-white/20 shadow-sm" aria-label="Toggle Dark Mode">
                     <i data-lucide="moon" id="theme-icon" class="w-4 h-4 md:w-5 md:h-5"></i>
                 </button>
@@ -138,6 +130,32 @@
         <div class="w-full bg-white dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-gray-800 shadow-sm relative z-20">
             <div id="categories-container" class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-start gap-3 overflow-x-auto no-scrollbar">
                 <!-- Dynamic categories go here -->
+            </div>
+        </div>
+
+        <!-- 4. NEW Search Bar Row -->
+        <div class="w-full bg-gray-50 dark:bg-[#121212] border-b border-gray-200 dark:border-gray-800 shadow-sm relative z-30">
+            <div class="max-w-7xl mx-auto px-6 py-2 flex justify-end relative h-14 items-center">
+                <!-- Search Trigger Button -->
+                <button id="search-trigger-btn" class="text-gray-500 hover:text-brand-purple dark:text-gray-400 dark:hover:text-brand-gold flex items-center gap-2 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </button>
+                
+                <!-- Centered Search Overlay -->
+                <div id="center-search-container" class="absolute inset-0 w-full h-full bg-gray-50 dark:bg-[#121212] flex items-center justify-center hidden opacity-0 transition-opacity duration-300 z-40 px-4">
+                    <div class="relative w-full max-w-3xl flex items-center">
+                        <i data-lucide="search" class="absolute left-4 text-gray-400 w-5 h-5 pointer-events-none"></i>
+                        <input type="text" id="center-search-input" placeholder="Search news by keyword, category, or date..." class="w-full bg-white dark:bg-[#1e1e1e] text-gray-900 dark:text-gray-100 text-[16px] md:text-sm rounded-full py-2.5 md:py-3 pl-12 pr-12 outline-none focus:ring-2 focus:ring-brand-gold transition-all shadow-md border border-gray-200 dark:border-gray-700" autocomplete="off" />
+                        <button id="close-center-search" class="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 bg-gray-100 dark:bg-gray-800 rounded-full">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                        
+                        <!-- Search Dropdown Results -->
+                        <div id="search-results-dropdown" class="absolute top-full left-0 right-0 mt-3 bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-gray-700 shadow-2xl rounded-2xl max-h-[60vh] overflow-y-auto no-scrollbar flex flex-col p-2 hidden z-50">
+                            <!-- Search items injected here -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -343,8 +361,6 @@
             tablesData: [],
             categories: [],
             selectedCategories: ["All"],
-            searchQuery: "",
-            isSearchActive: false,
             isDarkMode: localStorage.getItem('darkMode') === 'true'
         };
 
@@ -354,10 +370,14 @@
             editionOptions: document.getElementById('edition-options'),
             editionLabel: document.getElementById('active-edition-label'),
             editionChevron: document.getElementById('edition-chevron'),
-            searchBtn: document.getElementById('search-btn'),
-            searchContainer: document.getElementById('search-container'),
-            searchInput: document.getElementById('search-input'),
-            searchIcon: document.getElementById('search-icon'),
+            
+            // New Search DOM elements
+            searchTriggerBtn: document.getElementById('search-trigger-btn'),
+            centerSearchContainer: document.getElementById('center-search-container'),
+            centerSearchInput: document.getElementById('center-search-input'),
+            closeCenterSearch: document.getElementById('close-center-search'),
+            searchResultsDropdown: document.getElementById('search-results-dropdown'),
+
             themeToggle: document.getElementById('theme-toggle'),
             themeIcon: document.getElementById('theme-icon'),
             categoriesContainer: document.getElementById('categories-container'),
@@ -598,30 +618,11 @@
         }
 
         function getFilteredArticles() {
+            // Main feed is now ONLY filtered by category (search is handled via dropdown)
             let result = state.articles;
-            
-            // Filter by categories
             if (!state.selectedCategories.includes("All")) {
                 result = result.filter(a => state.selectedCategories.includes(a.Category));
             }
-            
-            // Highly inclusive multi-word fuzzy search
-            if (state.searchQuery.trim() !== "") {
-                const query = state.searchQuery.toLowerCase();
-                const searchTerms = query.split(' ').filter(term => term.length > 0);
-                
-                result = result.filter(article => {
-                    // Combine all text data in this article into one giant searchable string
-                    const searchableText = Object.values(article)
-                        .filter(val => typeof val === 'string' || typeof val === 'number')
-                        .join(' ')
-                        .toLowerCase();
-                    
-                    // The article must contain EVERY word the user typed in the search bar
-                    return searchTerms.every(term => searchableText.includes(term));
-                });
-            }
-            
             return result;
         }
 
@@ -798,27 +799,65 @@
                 }
             });
 
-            DOM.searchBtn.addEventListener('click', () => {
-                state.isSearchActive = !state.isSearchActive;
-                if (state.isSearchActive) {
-                    DOM.searchContainer.classList.remove('hidden');
-                    setTimeout(() => DOM.searchContainer.classList.add('opacity-100'), 10);
-                    DOM.searchIcon.setAttribute('data-lucide', 'x');
-                    DOM.searchInput.focus();
-                } else {
-                    DOM.searchContainer.classList.remove('opacity-100');
-                    setTimeout(() => DOM.searchContainer.classList.add('hidden'), 300);
-                    DOM.searchIcon.setAttribute('data-lucide', 'search');
-                    state.searchQuery = "";
-                    DOM.searchInput.value = "";
-                    updateUI();
-                }
-                lucide.createIcons();
+            // NEW SEARCH LOGIC
+            DOM.searchTriggerBtn.addEventListener('click', () => {
+                DOM.centerSearchContainer.classList.remove('hidden');
+                setTimeout(() => DOM.centerSearchContainer.classList.add('opacity-100'), 10);
+                DOM.centerSearchInput.focus();
             });
 
-            DOM.searchInput.addEventListener('input', (e) => {
-                state.searchQuery = e.target.value;
-                updateUI();
+            DOM.closeCenterSearch.addEventListener('click', () => {
+                DOM.centerSearchContainer.classList.remove('opacity-100');
+                setTimeout(() => {
+                    DOM.centerSearchContainer.classList.add('hidden');
+                    DOM.centerSearchInput.value = "";
+                    DOM.searchResultsDropdown.classList.add('hidden');
+                    DOM.searchResultsDropdown.innerHTML = '';
+                }, 300);
+            });
+
+            DOM.centerSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                const dropdown = DOM.searchResultsDropdown;
+                
+                if (query === "") {
+                    dropdown.classList.add('hidden');
+                    dropdown.innerHTML = '';
+                    return;
+                }
+
+                // Fuzzy search logic across all article fields
+                const searchTerms = query.split(' ').filter(term => term.length > 0);
+                const results = state.articles.filter(article => {
+                    const searchableText = Object.values(article)
+                        .filter(val => typeof val === 'string' || typeof val === 'number')
+                        .join(' ')
+                        .toLowerCase();
+                    return searchTerms.every(term => searchableText.includes(term));
+                });
+
+                dropdown.innerHTML = '';
+                if (results.length === 0) {
+                    dropdown.innerHTML = '<div class="p-4 text-center text-sm text-gray-500 dark:text-gray-400">No results found.</div>';
+                } else {
+                    results.forEach(article => {
+                        const itemHTML = `
+                            <div onclick="selectSearchResult(${article.id})" class="cursor-pointer group flex gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700">
+                                <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-gray-200 relative">
+                                    <img src="${article.Image_URL}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=200&q=80'"/>
+                                </div>
+                                <div class="flex flex-col justify-center flex-1">
+                                    <span class="text-[10px] font-bold text-brand-gold uppercase tracking-wider mb-1">${article.Category} • ${article.Date}</span>
+                                    <h4 class="font-serif font-bold text-gray-900 dark-text text-sm leading-tight line-clamp-2 group-hover:text-brand-purple transition-colors">
+                                        ${article.Headline}
+                                    </h4>
+                                </div>
+                            </div>
+                        `;
+                        dropdown.insertAdjacentHTML('beforeend', itemHTML);
+                    });
+                }
+                dropdown.classList.remove('hidden');
             });
 
             DOM.themeToggle.addEventListener('click', () => {
@@ -833,6 +872,7 @@
                 if (e.key === 'Escape') {
                     closeModal();
                     closeCreativeModal();
+                    DOM.closeCenterSearch.click();
                 }
             });
 
@@ -846,6 +886,12 @@
             DOM.closeCreativeBtn.addEventListener('click', closeCreativeModal);
             DOM.creativeModalOverlay.addEventListener('click', closeCreativeModal);
         }
+
+        // Window exposed function for search result clicks
+        window.selectSearchResult = function(id) {
+            openModal(id);
+            DOM.closeCenterSearch.click();
+        };
 
         const closeCreativeModal = () => {
             DOM.creativeModalContent.classList.remove('modal-content-active');
