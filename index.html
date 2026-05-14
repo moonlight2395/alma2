@@ -331,19 +331,19 @@
         // DYNAMIC ARTICLE ENGINE:
         const EDITION_SOURCES = {
             "March 2026": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLlwZL6OhqHOG04uln2mtfA4C8RmS3fADrmCYd4qXRy8qBopqJ5RpkokcrDhyCF26TQIPzKNXhDNU6/pub?output=csv",
-            "February 2026": "", 
-            "Centenary Special": "" 
+            "February 2026": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBVehcUr-IehJPzAPoUsfeK0vByh4PMF71XaDq-BJ_kbNoODWD7J5gr8NaYmi-vxUv9Ooa99VWrU4v/pub?output=csv", 
+            "January 2026": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRSMwfHGI_jnQW3RTxxTgjXCA02_iUK3BIQQYufv5Yc-Altl4Gcf_onQr88PDox3nqnpd5bbeddeANG/pub?output=csv" 
         };
 
         // DYNAMIC TABLES ENGINE: 
         const EDITION_TABLES = {
             "March 2026": [
                 {
-                    title: "Patents Filed in March",
-                    url: 'data:text/csv;charset=utf-8,"Title","Faculty","Filing Date"\n"A Process for Producing High Phase Purity Alpha-Silicon Nitride Powder","Dr. Kundan Kumar, Aryan Yadav, Dr. Mithun Palit","09/03/2026"\n"System and Method for AI-Based BPPV Maneuver Guidance Using Head-Pose Detection","Dr. Ajay Pratap, Dr. Deepika Joshi, Neetu Rani Dhiman, Nikita Sharma, Himanshu Singh","11/03/2026"\n"A Rechargeable Zinc Air Battery","Dr. Ashish Kumar Mishra, V. Ganesan, Varsha Singh, Mr. Rohit Kumar Gupta","13/03/2026"\n"Method of Preparation of a Perlin Aldehydes","Dr. Deepak Kumar, Ms. Pallavi Saha, Ms. Sunaina Kamboj","23/03/2026"'
-                },
-                {
                     title: "Patents Granted in March",
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNEw6ur0k-CcB24icI2ZDSUcteMyZhj3fTGXNSBgF0wPYeIB4jV1zyEjztMgw8g99aa6Q10JUbnsp/pub?output=csv
+                        },
+                {
+                    title: "Patents Filed in March",
                     url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSOrGepmKtFfdknWh1L1lHC2CLIdj9aKerWuyy8Q9zFoKmt02ETwBtF-bvTDXKNexT3-Mmkj8v6o7Uh/pub?output=csv'
                 },
                 {
@@ -351,12 +351,35 @@
                     url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQx7XhmXTqJaXCbAOG5lQGeHxiXyEyWjDJMQkSKHPgZ3f-EGkxYzmSkBOzQedq5OGYV9o9lgzJV4_21/pubhtml'
                 }
             ],
-            "February 2026": []
+            "February 2026": [ {
+                    title: "Patents Granted in February",
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNEw6ur0k-CcB24icI2ZDSUcteMyZhj3fTGXNSBgF0wPYeIB4jV1zyEjztMgw8g99aa6Q10JUbnsp/pub?output=csv
+                        },
+                {
+                    title: "Patents Filed in February",
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSOrGepmKtFfdknWh1L1lHC2CLIdj9aKerWuyy8Q9zFoKmt02ETwBtF-bvTDXKNexT3-Mmkj8v6o7Uh/pub?output=csv'
+                },
+                {
+                    title: "Projects sanctioned in February",
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQx7XhmXTqJaXCbAOG5lQGeHxiXyEyWjDJMQkSKHPgZ3f-EGkxYzmSkBOzQedq5OGYV9o9lgzJV4_21/pubhtml'
+                },                          ],
+            "January 2026": [ {
+                    title: "Patents Granted in January",
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNEw6ur0k-CcB24icI2ZDSUcteMyZhj3fTGXNSBgF0wPYeIB4jV1zyEjztMgw8g99aa6Q10JUbnsp/pub?output=csv
+                        },
+                {
+                    title: "Patents Filed in January",
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSOrGepmKtFfdknWh1L1lHC2CLIdj9aKerWuyy8Q9zFoKmt02ETwBtF-bvTDXKNexT3-Mmkj8v6o7Uh/pub?output=csv'
+                },
+                {
+                    title: "Projects sanctioned in January",
+                    url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQx7XhmXTqJaXCbAOG5lQGeHxiXyEyWjDJMQkSKHPgZ3f-EGkxYzmSkBOzQedq5OGYV9o9lgzJV4_21/pubhtml'
+                },                          ]
         };
 
         let state = {
             activeEdition: "March 2026",
-            editionsList: ["March 2026", "February 2026", "Centenary Special"],
+            editionsList: ["March 2026", "February 2026", "January 2026"],
             articles: [],
             tablesData: [],
             categories: [],
