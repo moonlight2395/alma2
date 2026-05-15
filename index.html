@@ -327,9 +327,9 @@
                         alt="Creative Section" 
                         class="w-full h-auto max-h-[80vh] object-contain transform transition-transform duration-700 group-hover:scale-[1.02]" 
                     />
-                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 pt-16 text-white pointer-events-none">
-                        <span class="px-3 py-1 bg-brand-gold text-brand-darkPurple text-xs font-bold uppercase tracking-widest rounded-sm shadow-md mb-2 inline-block">Creative Showcase</span>
-                        <h3 id="creative-modal-title" class="text-xl md:text-3xl font-serif font-bold drop-shadow-lg"></h3>
+                    <!-- Top Badge -->
+                    <div class="absolute top-4 left-4 md:top-6 md:left-6 z-20 pointer-events-none">
+                        <span class="px-3 py-1.5 bg-brand-gold text-brand-darkPurple text-xs md:text-sm font-bold uppercase tracking-widest rounded-lg shadow-xl inline-block border border-white/20">Creative Showcase</span>
                     </div>
                 </div>
             </div>
@@ -398,7 +398,7 @@
         // Input the image URL you want for each edition's creative section here
         const EDITION_CREATIVES = {
             "March 2026": "https://ik.imagekit.io/fcua6x8jl/Creative_page-0001.jpg",
-            "February 2026": "https://ik.imagekit.io/fcua6x8jl/Creativefeb_page-0001.jpg",
+            "February 2026": "https://ik.imagekit.io/fcua6x8jl/Framejan_page-0001.jpg",
             "January 2026": "https://ik.imagekit.io/fcua6x8jl/Framejan_page-0001.jpg"
         };
 
@@ -464,8 +464,7 @@
             creativeModalContent: document.getElementById('creative-modal-content'),
             creativeModalOverlay: document.getElementById('creative-modal-overlay'),
             closeCreativeBtn: document.getElementById('close-creative-btn'),
-            creativeModalImg: document.getElementById('creative-modal-img'),
-            creativeModalTitle: document.getElementById('creative-modal-title')
+            creativeModalImg: document.getElementById('creative-modal-img')
         };
 
         // ==========================================
@@ -933,7 +932,6 @@
                 // Dynamically load the creative for the active edition, or fallback to the first one
                 const currentCreative = EDITION_CREATIVES[state.activeEdition] || EDITION_CREATIVES["March 2026"];
                 DOM.creativeModalImg.src = currentCreative;
-                DOM.creativeModalTitle.textContent = `${state.activeEdition} Gallery`;
                 
                 DOM.creativeModal.classList.add('modal-active');
                 setTimeout(() => DOM.creativeModalContent.classList.add('modal-content-active'), 10);
