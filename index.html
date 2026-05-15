@@ -307,19 +307,32 @@
     </div>
 
     <!-- CREATIVE IMAGE MODAL -->
-    <div id="creative-modal" class="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-md transition-all duration-300 opacity-0 pointer-events-none">
+    <div id="creative-modal" class="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 bg-black/95 backdrop-blur-xl transition-all duration-500 opacity-0 pointer-events-none">
         <div id="creative-modal-overlay" class="absolute inset-0 cursor-pointer"></div>
         
-        <div id="creative-modal-content" class="bg-transparent w-full max-w-5xl max-h-[90vh] rounded-2xl flex flex-col relative transform scale-95 translate-y-8 opacity-0 transition-all duration-500 ease-out z-10">
-            <button id="close-creative-btn" class="absolute -top-12 right-0 md:-right-12 z-50 w-10 h-10 bg-white/20 hover:bg-white/40 text-white rounded-full flex items-center justify-center transition-all hover:rotate-90 backdrop-blur-md border border-white/30 shadow-lg">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
+        <div id="creative-modal-content" class="w-full max-w-5xl relative transform scale-95 translate-y-12 opacity-0 transition-all duration-700 ease-out z-10 flex flex-col items-center">
             
-            <img 
-                src="https://ik.imagekit.io/fcua6x8jl/Creative_page-0001.jpg" 
-                alt="Creative Section" 
-                class="w-full h-auto max-h-[85vh] object-contain rounded-xl shadow-2xl border border-white/10" 
-            />
+            <!-- Glowing backdrop -->
+            <div class="absolute inset-0 bg-brand-purple rounded-3xl blur-[100px] opacity-40 mix-blend-screen pointer-events-none animate-pulse"></div>
+
+            <div class="relative w-full bg-white/5 border border-white/20 p-2 md:p-4 rounded-2xl md:rounded-[2rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] backdrop-blur-sm group">
+                <button id="close-creative-btn" class="absolute -top-4 -right-4 md:-top-6 md:-right-6 z-50 w-10 h-10 md:w-12 md:h-12 bg-black/60 hover:bg-brand-gold hover:text-black text-white rounded-full flex items-center justify-center transition-all duration-300 hover:rotate-90 backdrop-blur-md border border-white/30 shadow-2xl">
+                    <i data-lucide="x" class="w-5 h-5 md:w-6 md:h-6"></i>
+                </button>
+                
+                <div class="overflow-hidden rounded-xl md:rounded-3xl relative">
+                    <img 
+                        id="creative-modal-img"
+                        src="" 
+                        alt="Creative Section" 
+                        class="w-full h-auto max-h-[80vh] object-contain transform transition-transform duration-700 group-hover:scale-[1.02]" 
+                    />
+                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 pt-16 text-white pointer-events-none">
+                        <span class="px-3 py-1 bg-brand-gold text-brand-darkPurple text-xs font-bold uppercase tracking-widest rounded-sm shadow-md mb-2 inline-block">Creative Showcase</span>
+                        <h3 id="creative-modal-title" class="text-xl md:text-3xl font-serif font-bold drop-shadow-lg"></h3>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -379,6 +392,14 @@
                     url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQx7XhmXTqJaXCbAOG5lQGeHxiXyEyWjDJMQkSKHPgZ3f-EGkxYzmSkBOzQedq5OGYV9o9lgzJV4_21/pubhtml'
                 }
             ]
+        };
+
+        // DYNAMIC CREATIVE ENGINE:
+        // Input the image URL you want for each edition's creative section here
+        const EDITION_CREATIVES = {
+            "March 2026": "https://ik.imagekit.io/fcua6x8jl/Creative_page-0001.jpg",
+            "February 2026": "https://ik.imagekit.io/fcua6x8jl/Creativefeb_page-0001.jpg",
+            "January 2026": "https://ik.imagekit.io/fcua6x8jl/Framejan_page-0001.jpg"
         };
 
         let state = {
@@ -442,7 +463,9 @@
             creativeModal: document.getElementById('creative-modal'),
             creativeModalContent: document.getElementById('creative-modal-content'),
             creativeModalOverlay: document.getElementById('creative-modal-overlay'),
-            closeCreativeBtn: document.getElementById('close-creative-btn')
+            closeCreativeBtn: document.getElementById('close-creative-btn'),
+            creativeModalImg: document.getElementById('creative-modal-img'),
+            creativeModalTitle: document.getElementById('creative-modal-title')
         };
 
         // ==========================================
@@ -907,6 +930,11 @@
 
             // Creative Modal Listeners
             DOM.creativeBtn.addEventListener('click', () => {
+                // Dynamically load the creative for the active edition, or fallback to the first one
+                const currentCreative = EDITION_CREATIVES[state.activeEdition] || EDITION_CREATIVES["March 2026"];
+                DOM.creativeModalImg.src = currentCreative;
+                DOM.creativeModalTitle.textContent = `${state.activeEdition} Gallery`;
+                
                 DOM.creativeModal.classList.add('modal-active');
                 setTimeout(() => DOM.creativeModalContent.classList.add('modal-content-active'), 10);
                 document.body.style.overflow = 'hidden';
