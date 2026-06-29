@@ -8,12 +8,12 @@
   - Data: https://img.shields.io/badge/Data-Google%20Sheets-34A853?logo=googlesheets
   - ![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
 -->
-- Frontend: https://img.shields.io/badge/Frontend-HTML5%20%7C%20CSS3%20%7C%20JavaScript-E34F26?logo=html5
-- Built with: https://img.shields.io/badge/Vanilla%20JS-ES6+-F7DF1E?logo=javascript&logoColor=black
-- Framework: https://img.shields.io/badge/Tailwind%20CSS-3.x-06B6D4?logo=tailwindcss
-- Data: https://img.shields.io/badge/Data-Google%20Sheets-34A853?logo=googlesheets
-- Organization: https://img.shields.io/badge/IIT(BHU)-SAIC-800000
-- Status: https://img.shields.io/badge/Status-Completed-brightgreen
+- !Frontend: https://img.shields.io/badge/Frontend-HTML5%20%7C%20CSS3%20%7C%20JavaScript-E34F26?logo=html5
+- !Built with: https://img.shields.io/badge/Vanilla%20JS-ES6+-F7DF1E?logo=javascript&logoColor=black
+- !Framework: https://img.shields.io/badge/Tailwind%20CSS-3.x-06B6D4?logo=tailwindcss
+- !Data: https://img.shields.io/badge/Data-Google%20Sheets-34A853?logo=googlesheets
+- !Organization: https://img.shields.io/badge/IIT(BHU)-SAIC-800000
+- !Status: https://img.shields.io/badge/Status-Completed-brightgreen
 
 > *Connecting the IIT (BHU) alumni fraternity — one edition at a time.*
 
@@ -26,11 +26,9 @@
 - [Features](#-features)
 - [Architecture](#️-architecture)
 - [Data Pipeline](#-data-pipeline)
-- [Installation & Deployment](#-installation--deployment)
 - [How to Add a New Edition](#-how-to-add-a-new-edition)
 - [Configuration Reference](#-configuration-reference)
 - [Project Structure](#-project-structure)
-- [Team](#-team)
 
 ---
 
@@ -136,36 +134,6 @@ Headers are **case-insensitive** and matched by keyword — exact naming is not 
 
 ---
 
-## 💻 Installation & Deployment
-
-### Local
-
-```bash
-# No build step needed — just open the file
-git clone https://github.com/yourusername/alma-communique.git
-cd alma-communique
-open index.html   # or drag into any browser
-```
-
-### Deploy to GitHub Pages
-
-```bash
-# Push to main branch
-git push origin main
-
-# Enable GitHub Pages:
-# Repository → Settings → Pages → Source: main branch / root
-# Your site will be live at: https://yourusername.github.io/alma-communique
-```
-
-### Deploy to Netlify
-
-Drop `index.html` into [netlify.com/drop](https://netlify.com/drop) — done.
-
-> The app requires **no server** — it runs entirely in the browser. Any static host works.
-
----
-
 ## ➕ How to Add a New Edition
 
 Adding a new monthly edition requires **4 lines of code**:
@@ -232,6 +200,7 @@ editionsList: ["April 2026", "March 2026", "February 2026", "January 2026"]
 > All application logic, styles, and markup live in `index.html`. External resources (Tailwind, Lucide, fonts) are loaded from CDN at runtime.
 
 ---
-"center">
-  Built with ♥ by SAIC &nbsp;|&nbsp; IIT (BHU) Varanasi &nbsp;|&nbsp; Zero backend · Pure web
+<p>
+<"center">
+ Zero backend · Pure web
 </p>
