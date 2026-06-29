@@ -1,19 +1,11 @@
 # 📰 Alma Communiqué
 
-<!-- DESIGN NOTE: Banner image (1280x320px). Dark purple background (#4A193E), gold lettering for "Alma Communiqué", subtitle: "The Official Alumni Newsletter of IIT (BHU) Varanasi". Add the IIT BHU logo on the right side. Save as: ![Banner](assets/banner.png) -->
-
-<!-- DESIGN NOTE: Add shields.io badges below the banner:
-  - Built with: https://img.shields.io/badge/Vanilla%20JS-ES6+-yellow?logo=javascript
-  - Tailwind: https://img.shields.io/badge/Tailwind%20CSS-3.x-06B6D4?logo=tailwindcss
-  - Data: https://img.shields.io/badge/Data-Google%20Sheets-34A853?logo=googlesheets
-  - ![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
--->
-- !Frontend: https://img.shields.io/badge/Frontend-HTML5%20%7C%20CSS3%20%7C%20JavaScript-E34F26?logo=html5
-- !Built with: https://img.shields.io/badge/Vanilla%20JS-ES6+-F7DF1E?logo=javascript&logoColor=black
-- !Framework: https://img.shields.io/badge/Tailwind%20CSS-3.x-06B6D4?logo=tailwindcss
-- !Data: https://img.shields.io/badge/Data-Google%20Sheets-34A853?logo=googlesheets
-- !Organization: https://img.shields.io/badge/IIT(BHU)-SAIC-800000
-- !Status: https://img.shields.io/badge/Status-Completed-brightgreen
+![Frontend](https://img.shields.io/badge/Frontend-HTML5%20%7C%20CSS3%20%7C%20JavaScript-E34F26?logo=html5)
+![Built with](https://img.shields.io/badge/Vanilla%20JS-ES6+-F7DF1E?logo=javascript&logoColor=black)
+![Framework](https://img.shields.io/badge/Tailwind%20CSS-3.x-06B6D4?logo=tailwindcss)
+![Data](https://img.shields.io/badge/Data-Google%20Sheets-34A853?logo=googlesheets)
+![Organization](https://img.shields.io/badge/IIT(BHU)-SAIC-800000)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
 
 > *Connecting the IIT (BHU) alumni fraternity — one edition at a time.*
 
